@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0B0A" />
+  <title>HELM — Command Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --bg: #0B0B0A;
+  --bg-2: #10100e;
+  --surface: #141412;
+  --surface-2: #1b1b18;
+  --paper: #F3F0E8;
+  --paper-dim: #d8d4c8;
+  --accent: #C4C8BF;
+  --accent-2: #9aa197;
+  --muted: #8c8c88;
+  --line: #2a2a26;
+  --line-2: #3a3a34;
+  --ink: #1a1a16;
+  --danger: #c45c4a;
+  --ok: #8aa37a;
+  --shadow: 0 24px 60px rgba(0,0,0,.45);
+  --serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --radius: 14px;
+  --safe-b: env(safe-area-inset-bottom, 12px);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { background: var(--bg); color: var(--paper); }
+body {
+  font-family: var(--sans);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(196,200,191,.06), transparent 50%),
+    radial-gradient(800px 400px at -10% 110%, rgba(243,240,232,.04), transparent 45%),
+    var(--bg);
+  min-height: 100dvh;
+  letter-spacing: .01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; }
+
+.app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 16px 108px;
+}
+
+/* Header */
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+.brand { display: flex; gap: 12px; align-items: center; min-width: 0; }
+.mark {
+  width: 42px; height: 42px; flex: 0 0 42px;
+  border: 1px solid var(--line-2);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--surface);
+}
+.mark svg { width: 26px; height: 26px; }
+.brand h1 {
+  font-family: var(--serif);
+  font-weight: 460;
+  font-size: 22px;
+  margin: 0;
+  letter-spacing: .04em;
+  line-height: 1.1;
+}
+.brand .sub {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.meta {
+  text-align: right;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.meta strong { color: var(--paper-dim); font-weight: 500; display: block; letter-spacing: .08em; }
+
+/* Views */
+.view { display: none; animation: rise .28s ease; }
+.view.on { display: block; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.kicker {
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin: 0 0 8px;
+}
+.lead {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 420;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+.blurb { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0 0 20px; max-width: 52ch; }
+
+/* Agent grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.agent {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 12px 12px;
+  text-align: left;
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color .15s, transform .15s, background .15s;
+}
+.agent:hover, .agent:focus-visible {
+  border-color: var(--accent-2);
+  transform: translateY(-1px);
+  outline: none;
+}
+.agent .rank {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+.agent .name {
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.1;
+}
+.agent .role { color: var(--muted); font-size: 12px; line-height: 1.4; flex: 1; }
+.agent .dotrow { display: flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px rgba(138,163,122,.6); }
+
+/* Chat */
+.chat-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.back {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--paper-dim);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.chat-head .who { min-width: 0; }
+.chat-head .who .name { font-family: var(--serif); font-size: 22px; margin: 0; }
+.chat-head .who .role { color: var(--muted); font-size: 12px; }
+.thread {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  min-height: 42vh;
+  max-height: 52vh;
+  overflow: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.bubble {
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.bubble.me {
+  align-self: flex-end;
+  background: var(--paper);
+  color: var(--ink);
+  border-bottom-right-radius: 4px;
+}
+.bubble.them {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+.bubble .tag {
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 6px;
+}
+.composer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.composer textarea {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 52px;
+  max-height: 140px;
+  resize: vertical;
+}
+.composer textarea:focus, input:focus, select:focus {
+  outline: 1px solid var(--accent-2);
+  border-color: var(--accent-2);
+}
+.send, .btn {
+  background: var(--paper);
+  color: var(--ink);
+  border: 0;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-weight: 560;
+  letter-spacing: .04em;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--paper-dim);
+  border: 1px solid var(--line);
+}
+.btn.full { width: 100%; padding: 12px; margin-top: 8px; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+/* Council */
+.council-box textarea {
+  width: 100%;
+  min-height: 110px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  resize: vertical;
+}
+.minutes { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.minute {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.minute.helm {
+  background: linear-gradient(180deg, #1a1a16, var(--surface));
+  border-color: var(--line-2);
+}
+.minute h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+.minute p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--paper-dim); white-space: pre-wrap; }
+
+/* Forms / dossier / log */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.card h3 {
+  margin: 0 0 10px;
+  font-family: var(--serif);
+  font-weight: 460;
+  font-size: 18px;
+}
+label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 10px 0 6px;
+}
+input[type="text"], select, textarea.field {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.entry {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+}
+.entry:last-child { border-bottom: 0; }
+.entry .when { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.entry .body { margin-top: 4px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 14px; }
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--paper-dim);
+}
+.chip.on { border-color: var(--accent); color: var(--paper); }
+.task {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.task input { margin-top: 3px; accent-color: var(--accent); }
+.task.done .t { text-decoration: line-through; color: var(--muted); }
+.task .own { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-2); }
+
+/* Dock */
+.dock {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(11,11,10,.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 8px 6px calc(8px + var(--safe-b));
+  z-index: 20;
+}
+.dock button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+}
+.dock button.on { color: var(--paper); }
+.dock svg { width: 18px; height: 18px; }
+
+.hint { color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .lead { font-size: 24px; }
+  .grid { grid-template-columns: 1fr 1fr; }
+  .agent { min-height: 118px; }
+  .brand h1 { font-size: 18px; }
+}
+@media (min-width: 900px) {
+  .app { padding-bottom: 40px; padding-top: 28px; }
+  .dock { display: none; }
+  .desk-nav { display: flex !important; }
+}
+.desk-nav { display: none; gap: 6px; flex-wrap: wrap; margin: -4px 0 18px; }
+.desk-nav button {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.desk-nav button.on { color: var(--paper); border-color: var(--accent-2); }
+
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="22" stroke="#C4C8BF" stroke-width="1.4"/>
+            <circle cx="32" cy="32" r="7" stroke="#F3F0E8" stroke-width="1.4"/>
+            <path d="M32 8v12M32 44v12M8 32h12M44 32h12M14.5 14.5l8.5 8.5M41 41l8.5 8.5M14.5 49.5l8.5-8.5M41 23l8.5-8.5" stroke="#C4C8BF" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1 id="companyTitle">HELM</h1>
+          <div class="sub">Private command · nine officers</div>
+        </div>
+      </div>
+      <div class="meta">
+        <strong id="clockDate">—</strong>
+        <span id="clockTime">—</span>
+      </div>
+    </header>
+
+    <nav class="desk-nav" id="deskNav"></nav>
+
+    <section class="view on" id="view-bridge">
+      <p class="kicker">The bridge</p>
+      <h2 class="lead">Nine officers. One deck.</h2>
+      <p class="blurb">Open an officer for a private counsel. Convene the full council when the decision needs every chair. Everything you write stays on this device.</p>
+      <div class="grid" id="agentGrid"></div>
+    </section>
+
+    <section class="view" id="view-chat">
+      <div class="chat-head">
+        <button class="back" type="button" data-go="bridge">Back</button>
+        <div class="who">
+          <p class="name" id="chatName">—</p>
+          <div class="role" id="chatRole">—</div>
+        </div>
+      </div>
+      <div class="thread" id="thread"></div>
+      <form class="composer" id="chatForm">
+        <textarea id="chatInput" placeholder="Speak to the officer…" required></textarea>
+        <button class="send" type="submit">Send</button>
+      </form>
+      <div class="row-actions">
+        <button class="btn ghost" type="button" id="copyPrompt">Copy Grok prompt</button>
+        <button class="btn ghost" type="button" id="clearChat">Clear thread</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-council">
+      <p class="kicker">Council chamber</p>
+      <h2 class="lead">Convene the nine.</h2>
+      <p class="blurb">State the matter once. Each officer answers from their chair. Helm closes with the order of the day.</p>
+      <div class="council-box">
+        <textarea id="councilQ" placeholder="What needs a decision, a plan, or a hard look?"></textarea>
+        <button class="btn full" type="button" id="convene">Convene council</button>
+      </div>
+      <div class="minutes" id="minutes"></div>
+    </section>
+
+    <section class="view" id="view-log">
+      <p class="kicker">Log book</p>
+      <h2 class="lead">The day, written down.</h2>
+      <p class="blurb">Stand-up notes, decisions, and work that must move. This is the memory of the company on this deck.</p>
+      <div class="chips" id="logChips"></div>
+      <div class="card">
+        <h3 id="logFormTitle">New entry</h3>
+        <label for="logBody">Note</label>
+        <textarea class="field" id="logBody" rows="4" placeholder="What happened. What was decided. What is next."></textarea>
+        <button class="btn full" type="button" id="saveLog">Commit to log</button>
+      </div>
+      <div class="card">
+        <h3>Open work</h3>
+        <label for="taskBody">Task</label>
+        <input type="text" id="taskBody" placeholder="One concrete move" />
+        <label for="taskOwner">Owner</label>
+        <select id="taskOwner"></select>
+        <button class="btn full" type="button" id="saveTask">Add task</button>
+        <div id="taskList"></div>
+      </div>
+      <div class="card">
+        <h3>Recent pages</h3>
+        <div id="logList"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-dossier">
+      <p class="kicker">Company dossier</p>
+      <h2 class="lead">What the officers know.</h2>
+      <p class="blurb">Fill this once and keep it current. Every counsel on this deck reads the dossier before it speaks.</p>
+      <div class="card">
+        <label for="coName">House name</label>
+        <input type="text" id="coName" />
+        <label for="coStage">Stage</label>
+        <input type="text" id="coStage" placeholder="Formation / build / first revenue / scale" />
+        <label for="coMission">Mission</label>
+        <textarea class="field" id="coMission" rows="3" placeholder="What this house exists to do."></textarea>
+        <label for="coOffers">Offers / ventures</label>
+        <textarea class="field" id="coOffers" rows="3" placeholder="Social Club, HPC, others…"></textarea>
+        <label for="coMarket">Market &amp; geography</label>
+        <input type="text" id="coMarket" placeholder="e.g. Johannesburg · ZA · B2B + B2C" />
+        <label for="coCash">Cash &amp; constraints</label>
+        <textarea class="field" id="coCash" rows="2" placeholder="Runway, burn, what is scarce."></textarea>
+        <label for="coNow">This season</label>
+        <textarea class="field" id="coNow" rows="3" placeholder="The one or two things that matter in the next 90 days."></textarea>
+        <label for="coNotes">Private notes</label>
+        <textarea class="field" id="coNotes" rows="4"></textarea>
+        <button class="btn full" type="button" id="saveDossier">Save dossier</button>
+        <p class="hint" id="dossierSaved" hidden>Dossier written.</p>
+      </div>
+      <div class="card">
+        <h3>Export</h3>
+        <p class="hint">Download a markdown brief of the house, the log, and open work — ready to paste into Grok.</p>
+        <button class="btn full ghost" type="button" id="exportMd">Download house brief</button>
+      </div>
+    </section>
+  </div>
+
+  <nav class="dock" id="dock"></nav>
+  <script>
+const AGENTS = [
+  {
+    id: "helm",
+    name: "Silas Vane",
+    rank: "Helm · Principal",
+    role: "Strategy, capital, final call",
+    voice: "Spare. Decides. Protects time and capital. Speaks last in council.",
+    lens: ["priority", "tradeoff", "focus", "no", "sequence"],
+    asks: [
+      "What is the one outcome that makes the rest easier?",
+      "What are we pretending is a strategy that is only activity?",
+      "If we could only do three things this month, which three?"
+    ]
+  },
+  {
+    id: "quarter",
+    name: "Ira Denham",
+    rank: "Quartermaster · Finance",
+    role: "Cash, price, unit economics",
+    voice: "Numbers first. Will not bless a plan that cannot pay for itself.",
+    lens: ["cash", "price", "margin", "runway", "cost"],
+    asks: [
+      "Where does the cash actually come from, and when?",
+      "What is the unit that must be profitable?",
+      "What are we spending that does not buy a result?"
+    ]
+  },
+  {
+    id: "nav",
+    name: "Kade Ndlovu",
+    rank: "Navigator · Market",
+    role: "Position, competitors, timing",
+    voice: "Maps the water. Cares about where the demand already is.",
+    lens: ["market", "competitor", "position", "timing", "wedge"],
+    asks: [
+      "Who already pays for a worse version of this?",
+      "Why us, in this city, in this season?",
+      "What must be true in the market for this to work?"
+    ]
+  },
+  {
+    id: "signal",
+    name: "Mara Voss",
+    rank: "Signal · Brand",
+    role: "Narrative, channels, desire",
+    voice: "Editorial. Attention is scarce. Taste is a strategy.",
+    lens: ["brand", "story", "channel", "audience", "creative"],
+    asks: [
+      "What do they feel before they understand?",
+      "Which channel do we actually own, not rent?",
+      "What would we never say, even to grow?"
+    ]
+  },
+  {
+    id: "engine",
+    name: "Rook Mthembu",
+    rank: "Engine · Product & ops",
+    role: "Build, delivery, systems",
+    voice: "Constraints over wishes. Shipping beats theatre.",
+    lens: ["build", "ops", "system", "scope", "delivery"],
+    asks: [
+      "What is the smallest version that is still real?",
+      "Where does work get stuck?",
+      "What will break when ten people show up at once?"
+    ]
+  },
+  {
+    id: "harbor",
+    name: "Juno Hale",
+    rank: "Harbor · Commercial",
+    role: "Sales, partners, pipeline",
+    voice: "Closes. Counts conversations, not intentions.",
+    lens: ["sale", "pipeline", "partner", "offer", "close"],
+    asks: [
+      "Who is the next ten buyers, by name or by desk?",
+      "What is the offer in one sentence they can repeat?",
+      "What stops a yes after a good meeting?"
+    ]
+  },
+  {
+    id: "charter",
+    name: "Isolde Hart",
+    rank: "Charter · Structure",
+    role: "Entity, paper, exposure",
+    voice: "Quiet paper. Prevents expensive surprises.",
+    lens: ["legal", "entity", "contract", "risk", "compliance"],
+    asks: [
+      "Whose name sits on the risk if this goes badly?",
+      "What must be on paper before money moves?",
+      "Are we structured for the house we say we are?"
+    ]
+  },
+  {
+    id: "crew",
+    name: "Amina Calder",
+    rank: "Crew · People",
+    role: "Capacity, hiring, energy",
+    voice: "Will not scale a machine that burns its people.",
+    lens: ["hire", "capacity", "culture", "energy", "role"],
+    asks: [
+      "Who is actually doing the work this week?",
+      "What role, if filled, unlocks the rest?",
+      "What should the principal stop doing?"
+    ]
+  },
+  {
+    id: "watch",
+    name: "Asher Pike",
+    rank: "Watch · Intelligence",
+    role: "Threats, gaps, weak signals",
+    voice: "Looks where others will not. Names the thing that can sink the ship.",
+    lens: ["risk", "intel", "assumption", "blind", "signal"],
+    asks: [
+      "What are we assuming that has not been tested?",
+      "Who benefits if we are slow?",
+      "What would a serious rival do this month?"
+    ]
+  }
+];
+
+const KEY = "helm.v1";
+const defaultState = () => ({
+  dossier: {
+    name: "HELM",
+    stage: "Formation",
+    mission: "A private house for building and holding ventures with discipline.",
+    offers: "Social Club (B2B + B2C). HPC.",
+    market: "Johannesburg · Gauteng · ZA",
+    cash: "",
+    now: "Stand the house up. Name the offer. Put the first commercial motion on a calendar.",
+    notes: ""
+  },
+  chats: {},
+  logs: [],
+  tasks: [],
+  council: []
+});
+
+let state = load();
+let currentAgent = null;
+let logKind = "note";
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return defaultState();
+    return { ...defaultState(), ...JSON.parse(raw) };
+  } catch {
+    return defaultState();
+  }
+}
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(state));
+}
+
+function $(id) { return document.getElementById(id); }
+
+function nowParts() {
+  const d = new Date();
+  const date = d.toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const time = d.toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" });
+  return { date, time, iso: d.toISOString() };
+}
+
+function tick() {
+  const { date, time } = nowParts();
+  $("clockDate").textContent = date;
+  $("clockTime").textContent = time + " SAST";
+}
+tick();
+setInterval(tick, 30000);
+
+function dossierText() {
+  const d = state.dossier;
+  return [
+    `House: ${d.name}`,
+    `Stage: ${d.stage}`,
+    `Mission: ${d.mission}`,
+    `Ventures: ${d.offers}`,
+    `Market: ${d.market}`,
+    `Cash: ${d.cash || "not stated"}`,
+    `This season: ${d.now}`,
+    d.notes ? `Notes: ${d.notes}` : ""
+  ].filter(Boolean).join("\n");
+}
+
+/* ---------- counsel engine ---------- */
+function classify(text) {
+  const t = text.toLowerCase();
+  const hits = [];
+  const bags = {
+    money: /cash|price|pric|margin|revenue|profit|cost|budget|runway|pay|invoice|fee/,
+    market: /market|compet|customer|audience|demand|position|niche|city|johannesburg/,
+    brand: /brand|name|story|content|post|look|aesthetic|logo|voice|campaign/,
+    build: /build|product|app|site|ops|system|deliver|ship|mvp|feature/,
+    sales: /sale|sell|pipeline|lead|partner|client|close|offer|b2b|b2c/,
+    legal: /legal|contract|entity|company|comply|tax|cipc|director|share/,
+    people: /hire|team|people|energy|burnout|role|founder|capacity/,
+    risk: /risk|threat|assume|wrong|fail|delay|block|competitor/,
+    plan: /plan|today|week|month|priority|focus|roadmap|goal/
+  };
+  for (const [k, re] of Object.entries(bags)) if (re.test(t)) hits.push(k);
+  return hits.length ? hits : ["plan"];
+}
+
+function pick(arr, seed) {
+  const n = Math.abs(hash(seed)) % arr.length;
+  return arr[n];
+}
+function hash(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return h;
+}
+
+function counsel(agent, userText, { brief = false } = {}) {
+  const topics = classify(userText);
+  const d = state.dossier;
+  const open = state.tasks.filter(t => !t.done);
+  const ask = pick(agent.asks, userText + agent.id);
+  const house = d.name || "the house";
+
+  const takes = {
+    helm: () => {
+      const focus = d.now || "name the season in the dossier";
+      if (topics.includes("money")) return `Capital is a vote. Spend only on the motion that produces the next yes. ${house} does not need more ideas; it needs a sequence. This season: ${focus}.`;
+      if (topics.includes("sales")) return `A company that cannot sell is a studio. Put Harbor on a list of ten real desks this week. Strategy without a buyer is a diary.`;
+      if (topics.includes("brand")) return `Taste is not the product. Taste is how the product is received. Do not decorate a house that has no door.`;
+      return `Protect the calendar. If it does not serve “${focus}”, it waits. Say no twice before you say maybe.`;
+    },
+    quarter: () => {
+      if (!d.cash) return `Cash is not written in the dossier. Until runway and price are named, every plan is fiction. Write the number, even if it is ugly.`;
+      return `Price is a position. If the unit cannot carry its own cost, volume will only accelerate the leak. Name the unit, the price, and the cost to deliver it — in that order.`;
+    },
+    nav: () => {
+      const geo = d.market || "an unnamed market";
+      return `The water is ${geo}. Do not invent demand. Find who already pays for a clumsy version of ${d.offers || "the offer"} and stand closer to them than anyone else this month.`;
+    },
+    signal: () => {
+      return `${house} should feel like a private room, not a brochure. One sentence they can repeat. One look they can recognise in the dark. Cut anything that could belong to another house.`;
+    },
+    engine: () => {
+      return `Shrink the surface. Ship the smallest thing that a stranger can use without you in the room. If Social Club and HPC both want build time, only one is the engine this fortnight.`;
+    },
+    harbor: () => {
+      return `Pipeline is names plus next dates. Not vibes. Write ten conversations. Offer in one sentence. After every meeting: what was the objection, and what is the next paper or proof they need.`;
+    },
+    charter: () => {
+      return `Structure before spectacle. If money, partners, or a public name move, the paper must already exist — entity, roles, who signs. Do not mix house risk with personal risk by accident.`;
+    },
+    crew: () => {
+      const load = open.length;
+      return `Capacity is the real constraint. Open work on the deck: ${load} item${load === 1 ? "" : "s"}. The principal cannot be every officer. Name one task that leaves this chair this week.`;
+    },
+    watch: () => {
+      return `The quiet risk is building two houses at once and finishing neither. Test the assumption that ${d.offers || "the ventures"} can share one calendar. A rival with less taste and more follow-up will take the room.`;
+    }
+  };
+
+  const moveBank = {
+    helm: ["Write the three moves for the next 14 days. Burn the rest of the list.", "Decide which venture is first chair this month. The other waits."],
+    quarter: ["Put a price on the lead offer, even as a draft.", "Write cash in / cash out for the next 30 days, one page."],
+    nav: ["List five buyers or rooms that already gather in this market.", "Name the competitor they would choose if we disappeared."],
+    signal: ["Draft the one-sentence house line. Say it out loud. Cut four words.", "Choose what we will never post, so the rest has a spine."],
+    engine: ["Define the smallest usable version. Date it.", "List the three operational steps after the first yes."],
+    harbor: ["Ten names. Next contact date on each.", "Write the offer as it would be said across a table, not a website."],
+    charter: ["Confirm what legal wrapper the house is wearing.", "List what must be signed before the first paid engagement."],
+    crew: ["Move one recurring task off the principal.", "Name the first hire or first contractor by function, not by vibe."],
+    watch: ["Write the three assumptions that, if wrong, kill the season.", "Do one hour of rival / room reconnaissance and log it."]
+  };
+
+  const take = (takes[agent.id] || takes.helm)();
+  const move = pick(moveBank[agent.id], userText);
+  const why = `Read through ${agent.lens.join(", ")}. House stage is ${d.stage || "unspecified"}.`;
+
+  if (brief) {
+    return `${take}\n→ ${move}`;
+  }
+
+  return [
+    take,
+    "",
+    "Why this chair",
+    why,
+    "",
+    "Move",
+    "• " + move,
+    "",
+    "Question from this chair",
+    ask
+  ].join("\n");
+}
+
+function grokPrompt(agent, extra = "") {
+  const history = (state.chats[agent.id] || []).slice(-8)
+    .map(m => `${m.who === "me" ? "Principal" : agent.name}: ${m.text}`)
+    .join("\n");
+  return `You are ${agent.name}, ${agent.rank} officer on the HELM command deck — a private company council for the principal.
+
+Voice: ${agent.voice}
+Domain: ${agent.role}
+You never break character. You do not speak for other officers unless asked to pass a note. You are direct, editorial, and concrete. No corporate filler. No cheerleading.
+
+COMPANY DOSSIER
+${dossierText()}
+
+Open work: ${state.tasks.filter(t => !t.done).map(t => t.text + " [" + t.owner + "]").join("; ") || "none listed"}
+
+${history ? "RECENT THREAD\n" + history : ""}
+${extra ? "\nMATTER\n" + extra : ""}
+
+Answer as ${agent.name} only. Give a take, one or two moves, and one precise question.`;
+}
+
+function councilPrompt(matter) {
+  return `You are the HELM council — nine officers of a private company command deck. The principal has convened you.
+
+Officers, in order:
+${AGENTS.map(a => `- ${a.name} (${a.rank}): ${a.role}. Voice: ${a.voice}`).join("\n")}
+
+DOSSIER
+${dossierText()}
+
+Open work: ${state.tasks.filter(t => !t.done).map(t => t.text).join("; ") || "none"}
+
+MATTER
+${matter}
+
+Protocol:
+1. Each officer speaks in turn, short (6–10 lines). Stay in chair.
+2. Disagreement is required if the chairs actually disagree. Do not chorus.
+3. Helm speaks last with: the decision or the decision that is still missing, the order of the next 7 days, and what is refused.
+Write the minutes.`;
+}
+
+/* ---------- views ---------- */
+const VIEWS = [
+  { id: "bridge", label: "Bridge" },
+  { id: "council", label: "Council" },
+  { id: "log", label: "Log" },
+  { id: "dossier", label: "Dossier" }
+];
+
+function show(id) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("on"));
+  const el = $("view-" + id) || $("view-bridge");
+  el.classList.add("on");
+  document.querySelectorAll(".dock button, .desk-nav button").forEach(b => {
+    b.classList.toggle("on", b.dataset.view === id || (id === "chat" && b.dataset.view === "bridge"));
+  });
+  if (id !== "chat") currentAgent = null;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function navButtons(target) {
+  target.innerHTML = VIEWS.map(v =>
+    `<button type="button" data-view="${v.id}">${icon(v.id)}${target.id === "dock" ? v.label : v.label}</button>`
+  ).join("");
+  target.querySelectorAll("button").forEach(b => b.addEventListener("click", () => show(b.dataset.view)));
+}
+
+function icon(id) {
+  const paths = {
+    bridge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.2"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg>',
+    council: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18V8l8-4 8 4v10"/><path d="M8 18v-6h8v6"/></svg>',
+    log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+    dossier: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14v12H5z"/><path d="M8 7V5h8v2"/></svg>'
+  };
+  return paths[id] || "";
+}
+
+navButtons($("dock"));
+navButtons($("deskNav"));
+$("deskNav").querySelector('[data-view="bridge"]').classList.add("on");
+$("dock").querySelector('[data-view="bridge"]').classList.add("on");
+
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => show(b.dataset.go)));
+
+function renderAgents() {
+  $("agentGrid").innerHTML = AGENTS.map(a => `
+    <button class="agent" type="button" data-agent="${a.id}">
+      <div class="rank">${a.rank}</div>
+      <div class="name">${a.name}</div>
+      <div class="role">${a.role}</div>
+      <div class="dotrow"><span class="dot"></span> on watch</div>
+    </button>
+  `).join("");
+  $("agentGrid").querySelectorAll(".agent").forEach(btn => {
+    btn.addEventListener("click", () => openChat(btn.dataset.agent));
+  });
+}
+
+function openChat(id) {
+  currentAgent = AGENTS.find(a => a.id === id);
+  $("chatName").textContent = currentAgent.name;
+  $("chatRole").textContent = currentAgent.rank + " · " + currentAgent.role;
+  renderThread();
+  show("chat");
+  $("chatInput").focus();
+}
+
+function renderThread() {
+  const msgs = state.chats[currentAgent.id] || [];
+  const thread = $("thread");
+  if (!msgs.length) {
+    thread.innerHTML = `<div class="bubble them"><div class="tag">${currentAgent.name} · ${currentAgent.rank}</div>${currentAgent.voice}\n\n${currentAgent.asks[0]}</div>`;
+    return;
+  }
+  thread.innerHTML = msgs.map(m => {
+    if (m.who === "me") return `<div class="bubble me">${esc(m.text)}</div>`;
+    return `<div class="bubble them"><div class="tag">${currentAgent.name}</div>${esc(m.text)}</div>`;
+  }).join("");
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+}
+
+$("chatForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (!currentAgent) return;
+  const text = $("chatInput").value.trim();
+  if (!text) return;
+  const id = currentAgent.id;
+  state.chats[id] = state.chats[id] || [];
+  state.chats[id].push({ who: "me", text, at: Date.now() });
+  const reply = counsel(currentAgent, text);
+  state.chats[id].push({ who: "them", text: reply, at: Date.now() });
+  save();
+  $("chatInput").value = "";
+  renderThread();
+});
+
+$("clearChat").addEventListener("click", () => {
+  if (!currentAgent) return;
+  state.chats[currentAgent.id] = [];
+  save();
+  renderThread();
+});
+
+$("copyPrompt").addEventListener("click", async () => {
+  if (!currentAgent) return;
+  const last = (state.chats[currentAgent.id] || []).filter(m => m.who === "me").slice(-1)[0];
+  const text = grokPrompt(currentAgent, last ? last.text : "");
+  try {
+    await navigator.clipboard.writeText(text);
+    $("copyPrompt").textContent = "Copied";
+    setTimeout(() => $("copyPrompt").textContent = "Copy Grok prompt", 1400);
+  } catch {
+    prompt("Copy this prompt", text);
+  }
+});
+
+$("convene").addEventListener("click", () => {
+  const q = $("councilQ").value.trim();
+  if (!q) return;
+  const minutes = AGENTS.map(a => ({
+    id: a.id,
+    name: a.name,
+    rank: a.rank,
+    text: counsel(a, q, { brief: true })
+  }));
+  const synthesis = [
+    "Order of the day",
+    "1. Write the season in the dossier if it is still vague — Helm will not steer fog.",
+    "2. One commercial motion with dates (Harbor) and a price (Quartermaster).",
+    "3. One build surface, not two (Engine).",
+    "Refused: activity that does not serve the season. Two ventures on one calendar is a risk Watch already named."
+  ].join("\n");
+  minutes.push({ id: "close", name: "Helm", rank: "Close", text: synthesis });
+  state.council.unshift({ q, at: Date.now(), minutes });
+  state.logs.unshift({ kind: "council", body: q, at: Date.now() });
+  save();
+  renderMinutes(minutes, q);
+});
+
+function renderMinutes(minutes, q) {
+  $("minutes").innerHTML =
+    `<p class="hint">Matter: ${esc(q)}</p>` +
+    minutes.map(m => `
+      <article class="minute ${m.id === "helm" || m.id === "close" ? "helm" : ""}">
+        <h3>${esc(m.name)} · ${esc(m.rank)}</h3>
+        <p>${esc(m.text)}</p>
+      </article>
+    `).join("") +
+    `<button class="btn full ghost" type="button" id="copyCouncil">Copy full Grok council prompt</button>`;
+  $("copyCouncil")?.addEventListener("click", async () => {
+    const text = councilPrompt(q);
+    try {
+      await navigator.clipboard.writeText(text);
+      $("copyCouncil").textContent = "Copied";
+    } catch {
+      prompt("Copy this prompt", text);
+    }
+  });
+}
+
+/* log */
+const kinds = [
+  { id: "note", label: "Note" },
+  { id: "decision", label: "Decision" },
+  { id: "stand", label: "Stand-up" }
+];
+function renderChips() {
+  $("logChips").innerHTML = kinds.map(k =>
+    `<button class="chip ${logKind === k.id ? "on" : ""}" type="button" data-k="${k.id}">${k.label}</button>`
+  ).join("");
+  $("logChips").querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+    logKind = c.dataset.k;
+    $("logFormTitle").textContent = "New " + kinds.find(k => k.id === logKind).label.toLowerCase();
+    renderChips();
+  }));
+}
+$("saveLog").addEventListener("click", () => {
+  const body = $("logBody").value.trim();
+  if (!body) return;
+  state.logs.unshift({ kind: logKind, body, at: Date.now() });
+  $("logBody").value = "";
+  save();
+  renderLogs();
+});
+function renderLogs() {
+  const list = state.logs.slice(0, 30);
+  if (!list.length) {
+    $("logList").innerHTML = `<p class="hint">The book is empty. Write the first page.</p>`;
+    return;
+  }
+  $("logList").innerHTML = list.map(e => {
+    const when = new Date(e.at).toLocaleString("en-ZA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    return `<div class="entry"><div class="when">${when} · ${e.kind}</div><div class="body">${esc(e.body)}</div></div>`;
+  }).join("");
+}
+
+$("saveTask").addEventListener("click", () => {
+  const text = $("taskBody").value.trim();
+  if (!text) return;
+  state.tasks.unshift({ text, owner: $("taskOwner").value, done: false, at: Date.now() });
+  $("taskBody").value = "";
+  save();
+  renderTasks();
+});
+function renderTasks() {
+  $("taskOwner").innerHTML = AGENTS.map(a => `<option value="${a.name}">${a.name}</option>`).join("");
+  const list = state.tasks;
+  if (!list.length) {
+    $("taskList").innerHTML = `<p class="hint">No open work.</p>`;
+    return;
+  }
+  $("taskList").innerHTML = list.map((t, i) => `
+    <label class="task ${t.done ? "done" : ""}">
+      <input type="checkbox" data-i="${i}" ${t.done ? "checked" : ""} />
+      <span>
+        <div class="own">${esc(t.owner)}</div>
+        <div class="t">${esc(t.text)}</div>
+      </span>
+    </label>
+  `).join("");
+  $("taskList").querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("change", () => {
+      state.tasks[+inp.dataset.i].done = inp.checked;
+      save();
+      renderTasks();
+    });
+  });
+}
+
+/* dossier */
+function fillDossier() {
+  const d = state.dossier;
+  $("coName").value = d.name || "";
+  $("coStage").value = d.stage || "";
+  $("coMission").value = d.mission || "";
+  $("coOffers").value = d.offers || "";
+  $("coMarket").value = d.market || "";
+  $("coCash").value = d.cash || "";
+  $("coNow").value = d.now || "";
+  $("coNotes").value = d.notes || "";
+  $("companyTitle").textContent = d.name || "HELM";
+}
+$("saveDossier").addEventListener("click", () => {
+  state.dossier = {
+    name: $("coName").value.trim() || "HELM",
+    stage: $("coStage").value.trim(),
+    mission: $("coMission").value.trim(),
+    offers: $("coOffers").value.trim(),
+    market: $("coMarket").value.trim(),
+    cash: $("coCash").value.trim(),
+    now: $("coNow").value.trim(),
+    notes: $("coNotes").value.trim()
+  };
+  save();
+  $("companyTitle").textContent = state.dossier.name;
+  $("dossierSaved").hidden = false;
+  setTimeout(() => $("dossierSaved").hidden = true, 1600);
+});
+
+$("exportMd").addEventListener("click", () => {
+  const { date } = nowParts();
+  const md = [
+    `# ${state.dossier.name} — house brief`,
+    date,
+    "",
+    "## Dossier",
+    dossierText(),
+    "",
+    "## Open work",
+    ...(state.tasks.filter(t => !t.done).map(t => `- [${t.owner}] ${t.text}`) || ["- none"]),
+    "",
+    "## Log (latest)",
+    ...state.logs.slice(0, 12).map(e => `- (${new Date(e.at).toLocaleDateString("en-ZA")} · ${e.kind}) ${e.body}`)
+  ].join("\n");
+  const blob = new Blob([md], { type: "text/markdown" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (state.dossier.name || "helm").toLowerCase().replace(/\s+/g, "-") + "-brief.md";
+  a.click();
+});
+
+renderAgents();
+renderChips();
+renderLogs();
+renderTasks();
+fillDossier();
+
+</script>
+</body>
+</html>
