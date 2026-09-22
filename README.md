@@ -2,9 +2,16 @@
 
 Marketing site for High Performers Club — an elite athletic club for entrepreneurs, athletes, and operators.
 
-## Live hosting (pick one)
+## Live
 
-### Option A — GitHub Pages (recommended, free)
+**Production:** https://high-performers-club.netlify.app  
+**Admin:** https://app.netlify.com/projects/high-performers-club
+
+Redeploy after changes: `npx netlify deploy --prod --dir=.` (or connect continuous deploy from GitHub in the Netlify UI).
+
+## Other hosting options
+
+### Option A — GitHub Pages (free)
 Repo already has a `gh-pages` deploy branch and an Actions workflow.
 
 **Enable once (repo owner):**
