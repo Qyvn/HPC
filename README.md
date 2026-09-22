@@ -7,6 +7,8 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 **Production:** https://high-performers-club.netlify.app  
 **Admin:** https://app.netlify.com/projects/high-performers-club
 
+**Apply form:** Netlify Forms (`name="apply"`). If submissions 404, open Admin → **Forms** and confirm Forms are enabled for the site, then redeploy.
+
 Redeploy after changes: `npx netlify deploy --prod --dir=.` (or connect continuous deploy from GitHub in the Netlify UI).
 
 ## Other hosting options
