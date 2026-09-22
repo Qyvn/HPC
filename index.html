@@ -857,15 +857,18 @@ section {
         if (submitBtn) submitBtn.disabled = true;
         try {
           const data = new FormData(form);
-          await fetch("/", {
+          const res = await fetch("/", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams(data).toString(),
           });
+          if (!res.ok) throw new Error(String(res.status));
           form.classList.add("is-hidden");
           success.classList.add("is-visible");
         } catch (err) {
-          form.submit();
+          if (submitBtn) submitBtn.disabled = false;
+          // Native POST — Netlify registers the form on first successful HTML parse/deploy.
+          HTMLFormElement.prototype.submit.call(form);
         }
       });
     }
