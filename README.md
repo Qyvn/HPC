@@ -2,19 +2,37 @@
 
 Marketing site for High Performers Club — an elite athletic club for entrepreneurs, athletes, and operators.
 
-## Live
+## Live hosting (pick one)
 
-- **Repo:** https://github.com/Qyvn/HPC
-- **GitHub Pages (permanent):** https://qyvn.github.io/HPC/
+### Option A — GitHub Pages (recommended, free)
+Repo already has a `gh-pages` deploy branch and an Actions workflow.
 
-To activate Pages (one-time): **Settings → Pages → Build and deployment → Source: GitHub Actions**, then re-run the **Deploy GitHub Pages** workflow under the Actions tab.
+**Enable once (repo owner):**
+1. Open https://github.com/Qyvn/HPC/settings/pages  
+2. Under **Build and deployment → Source**, choose either:
+   - **Deploy from a branch** → Branch: `gh-pages` → Folder: `/ (root)` → Save  
+   - **or** **GitHub Actions** (uses `.github/workflows/deploy-pages.yml`)
+3. Site URL: **https://qyvn.github.io/HPC/**
 
-## Local
+Optional custom domain: same Pages settings → Custom domain → `yourdomain.com`
 
-Open `index.html` in a browser, or:
+### Option B — Netlify (free, great for waitlist forms later)
+1. Go to https://app.netlify.com/start  
+2. **Import from Git** → choose `Qyvn/HPC`  
+3. Build command: leave blank / use `netlify.toml`  
+4. Publish directory: `.`  
+5. Deploy — you get a `*.netlify.app` URL, then add your domain
+
+### Option C — Vercel (free)
+1. Go to https://vercel.com/new  
+2. Import `Qyvn/HPC`  
+3. Framework: Other · Root: `.`  
+4. Deploy — you get a `*.vercel.app` URL
+
+## Local preview
 
 ```bash
 python3 -m http.server 8765
 ```
 
-Then visit http://127.0.0.1:8765/
+Visit http://127.0.0.1:8765/
