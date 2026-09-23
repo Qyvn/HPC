@@ -1,0 +1,6 @@
+{
+  "name": "hpc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "High Performers Club static site + ops functions"
+}
