@@ -1,3 +1,7 @@
+# High Performers Club
+
+Marketing site for High Performers Club — an elite athletic club for entrepreneurs, athletes, and operators.
+
 ## Live
 
 **Production:** https://highperformersclub.co.za  
@@ -16,3 +20,7 @@
 Form fields: name, email, lane, why.
 
 Redeploy after changes: `npx netlify deploy --prod --dir=.`
+
+## Domain email
+
+See **EMAIL.md** for ImprovMX / Microsoft 365 setup so `apply@highperformersclub.co.za` receives mail.
