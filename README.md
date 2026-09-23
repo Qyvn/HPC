@@ -6,7 +6,8 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 
 **Production:** https://highperformersclub.co.za  
 **Fallback:** https://high-performers-club.netlify.app  
-**Admin:** https://app.netlify.com/projects/high-performers-club
+**Admin:** https://app.netlify.com/projects/high-performers-club  
+**Privacy:** https://highperformersclub.co.za/privacy.html
 
 ### Applications (Apply form)
 
