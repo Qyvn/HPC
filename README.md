@@ -4,10 +4,18 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 
 ## Live
 
-**Production:** https://high-performers-club.netlify.app  
+**Production:** https://highperformersclub.co.za  
+**Fallback:** https://high-performers-club.netlify.app  
 **Admin:** https://app.netlify.com/projects/high-performers-club
 
-**Apply form:** Netlify Forms (`name="apply"`). If submissions 404, open Admin → **Forms** and confirm Forms are enabled for the site, then redeploy.
+### Applications (Apply form)
+
+Until a full CRM (HubSpot) is connected, applications land in two places:
+
+1. **Email alert** → `highperfomersclub@outlook.com` (subject: “New High Performers Club application”)
+2. **Netlify inbox** → [Forms → apply](https://app.netlify.com/projects/high-performers-club/forms)
+
+Form fields: name, email, lane, why.
 
 Redeploy after changes: `npx netlify deploy --prod --dir=.` (or connect continuous deploy from GitHub in the Netlify UI).
 
