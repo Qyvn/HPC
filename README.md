@@ -12,7 +12,7 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 
 Until a full CRM (HubSpot) is connected, applications land in two places:
 
-1. **Email alert** → `highperfomersclub@outlook.com` (subject: “New High Performers Club application”)
+1. **Email alert** → `highperformersclub@outlook.com` (subject: “New High Performers Club application”)
 2. **Netlify inbox** → [Forms → apply](https://app.netlify.com/projects/high-performers-club/forms)
 
 Form fields: name, email, lane, why.
