@@ -1,9 +1,15 @@
-<!-- Netlify Forms detection helper (hidden). Do not remove. -->
+<!-- Netlify form detection helper. Keep fields in sync with index.html apply form. -->
 <form name="apply" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="hidden" name="form-name" value="apply" />
-  <input type="text" name="bot-field" />
-  <input type="text" name="name" />
-  <input type="email" name="email" />
-  <input type="text" name="lane" />
+  <input name="bot-field" />
+  <input name="name" type="text" />
+  <input name="email" type="email" />
+  <select name="lane">
+    <option value="entrepreneur">Entrepreneur</option>
+    <option value="athlete">Athlete</option>
+    <option value="operator">Operator</option>
+    <option value="founder">Founder</option>
+    <option value="other">Other</option>
+  </select>
   <textarea name="why"></textarea>
 </form>

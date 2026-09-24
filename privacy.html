@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex" />
+  <title>Privacy — High Performers Club</title>
+  <link rel="icon" type="image/png" href="public/assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --line: rgba(192, 198, 208, 0.14);
+      --silver: #c8ced8;
+      --silver-bright: #e8ecf2;
+      --silver-dim: #8a919c;
+      --muted: #9aa1ab;
+      --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+      --body: "Space Grotesk", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--body);
+      color: var(--silver);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+    }
+    a { color: var(--silver-bright); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      margin-bottom: 48px;
+    }
+    .brand img { width: 28px; height: auto; }
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      line-height: 1.35;
+      margin: 0 0 12px;
+    }
+    .meta {
+      font-family: var(--display);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 36px;
+    }
+    h2 {
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      margin: 32px 0 12px;
+    }
+    p { margin: 0 0 14px; color: var(--muted); font-size: 1rem; }
+    .back {
+      display: inline-block;
+      margin-top: 48px;
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="public/assets/hpc-mark.png" width="28" height="28" alt="" />
+      High Performers Club
+    </a>
+    <h1>Privacy</h1>
+    <p class="meta">Application data</p>
+    <p>
+      When you submit an application, we collect the details you provide — name, email, lane, and your note — so we can review entry and reply.
+    </p>
+    <h2>Use</h2>
+    <p>
+      Application data is used only to evaluate membership interest and communicate about the club. We do not sell it.
+    </p>
+    <h2>Storage</h2>
+    <p>
+      Submissions are stored with our hosting form system and may be emailed to the club inbox for review.
+    </p>
+    <h2>Contact</h2>
+    <p>
+      Questions about your data: <a href="mailto:apply@highperformersclub.co.za">apply@highperformersclub.co.za</a>
+    </p>
+    <a class="back" href="/">← Back to High Performers Club</a>
+  </div>
+</body>
+</html>
