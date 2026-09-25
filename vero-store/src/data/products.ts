@@ -1,13 +1,26 @@
 export type CategoryId = "weaves" | "couch-bags" | "colognes" | "tees";
 
+export type ProductColor = {
+  id: string;
+  name: string;
+  /** Swatch hex for the colour picker */
+  hex: string;
+  image?: string;
+};
+
 export type Product = {
   id: string;
   name: string;
   category: CategoryId;
-  price: number;
+  /** Omit until pricing is ready */
+  price?: number;
   description: string;
   sizes?: string[];
-  /** Set when you upload product photos into /public/products/ */
+  /** Colourways — image optional per colour */
+  colors?: ProductColor[];
+  /** Style version label shown in UI, e.g. Classic / Quilted */
+  version?: string;
+  /** Fallback image when no colour image is set */
   image?: string;
   featured?: boolean;
   newArrival?: boolean;
@@ -28,7 +41,7 @@ export const CATEGORIES: {
   {
     id: "couch-bags",
     label: "Couch Bags",
-    blurb: "Compact carry. Structured ease for every seat.",
+    blurb: "Signature carry — versions and colourways to choose from.",
     tone: "linear-gradient(145deg, #1a1a1a 0%, #3f3a34 50%, #8a7b66 100%)",
   },
   {
@@ -74,33 +87,48 @@ export const products: Product[] = [
       "Sleek, straight length for a sharp editorial line. Photo slot ready for your upload.",
   },
   {
-    id: "bag-city-couch",
-    name: "City Couch Bag",
+    id: "bag-tabby-shoulder",
+    name: "Tabby Shoulder",
     category: "couch-bags",
-    price: 128,
+    version: "Classic",
     description:
-      "Compact structured bag for day-to-night carry. Replace this placeholder with your bag photography.",
+      "Structured flap shoulder bag in pebbled leather with signature gold hardware. Soft strap, clean silhouette — your everyday signature carry.",
     featured: true,
     newArrival: true,
-    sizes: ["One Size"],
+    colors: [
+      {
+        id: "taupe",
+        name: "Taupe",
+        hex: "#8a7768",
+        image: "/products/bags/tabby-taupe.jpg",
+      },
+      { id: "black", name: "Black", hex: "#1a1a1a" },
+      { id: "chalk", name: "Chalk", hex: "#e8e2d8" },
+      { id: "stone", name: "Stone", hex: "#b5aea3" },
+      { id: "espresso", name: "Espresso", hex: "#3b2a22" },
+    ],
   },
   {
-    id: "bag-soft-clutch",
-    name: "Soft Fold Clutch",
+    id: "bag-quilted-chain",
+    name: "Quilted Chain",
     category: "couch-bags",
-    price: 98,
+    version: "Quilted",
     description:
-      "Soft fold silhouette with clean hardware. Await your product image.",
-    sizes: ["One Size"],
-  },
-  {
-    id: "bag-evening-mini",
-    name: "Evening Mini",
-    category: "couch-bags",
-    price: 112,
-    description:
-      "Petite evening bag with a quiet gold accent. Photo placeholder until upload.",
-    sizes: ["One Size"],
+      "Puffy quilted leather with chain-and-leather strap and brushed gold C clasp. Wear short on the shoulder or long as a crossbody.",
+    featured: true,
+    newArrival: true,
+    colors: [
+      {
+        id: "black",
+        name: "Black",
+        hex: "#111111",
+        image: "/products/bags/quilted-black.jpg",
+      },
+      { id: "ivory", name: "Ivory", hex: "#f2ebe3" },
+      { id: "taupe", name: "Taupe", hex: "#8a7768" },
+      { id: "olive", name: "Olive", hex: "#5c6048" },
+      { id: "wine", name: "Wine", hex: "#5a2a32" },
+    ],
   },
   {
     id: "cologne-vero-noir",
@@ -182,4 +210,23 @@ export function getProduct(id: string) {
 export function productsByCategory(id?: CategoryId | "all") {
   if (!id || id === "all") return products;
   return products.filter((p) => p.category === id);
+}
+
+export function getProductImage(
+  product: Product,
+  colorId?: string,
+): string | undefined {
+  if (colorId && product.colors?.length) {
+    const match = product.colors.find((c) => c.id === colorId);
+    if (match?.image) return match.image;
+  }
+  const firstWithImage = product.colors?.find((c) => c.image);
+  return firstWithImage?.image ?? product.image;
+}
+
+export function getProductColor(product: Product, colorId?: string) {
+  if (!product.colors?.length) return undefined;
+  return (
+    product.colors.find((c) => c.id === colorId) ?? product.colors[0]
+  );
 }

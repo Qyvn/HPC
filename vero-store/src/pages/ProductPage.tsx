@@ -4,6 +4,9 @@ import {
   formatPrice,
   getCategory,
   getProduct,
+  getProductColor,
+  getProductImage,
+  products,
 } from "../data/products";
 import { useCart } from "../context/CartContext";
 
@@ -13,19 +16,33 @@ export function ProductPage() {
   const { addItem } = useCart();
   const category = product ? getCategory(product.category) : undefined;
   const sizes = product?.sizes ?? [];
+  const colors = product?.colors ?? [];
   const [size, setSize] = useState(sizes[0] ?? "");
+  const [colorId, setColorId] = useState(colors[0]?.id ?? "");
   const [qtyPreview, setQtyPreview] = useState(1);
 
   useEffect(() => {
     setSize(product?.sizes?.[0] ?? "");
+    setColorId(product?.colors?.[0]?.id ?? "");
     setQtyPreview(1);
-  }, [product?.id, product?.sizes]);
+  }, [product?.id, product?.sizes, product?.colors]);
+
+  const activeColor = product ? getProductColor(product, colorId) : undefined;
+  const image = product ? getProductImage(product, colorId) : undefined;
+
+  const relatedVersions = useMemo(() => {
+    if (!product || product.category !== "couch-bags") return [];
+    return products.filter(
+      (p) => p.category === "couch-bags" && p.id !== product.id,
+    );
+  }, [product]);
 
   const canAdd = useMemo(() => {
     if (!product) return false;
     if (sizes.length > 0 && !size) return false;
+    if (colors.length > 0 && !colorId) return false;
     return true;
-  }, [product, size, sizes.length]);
+  }, [product, size, sizes.length, colorId, colors.length]);
 
   if (!product || !category) {
     return (
@@ -45,23 +62,70 @@ export function ProductPage() {
     <div className="page">
       <div className="container-wide product-detail">
         <div className="product-detail__gallery">
-          {product.image ? (
-            <img src={product.image} alt={product.name} />
+          {image ? (
+            <img
+              src={image}
+              alt={`${product.name}${activeColor ? ` — ${activeColor.name}` : ""}`}
+            />
           ) : (
             <div
               className="product-card__placeholder"
-              style={{ background: category.tone, minHeight: "100%" }}
+              style={{
+                background: activeColor?.hex ?? category.tone,
+                minHeight: "100%",
+              }}
             >
-              <span>{product.name}</span>
+              <span>
+                {product.name}
+                {activeColor ? ` · ${activeColor.name}` : ""}
+              </span>
             </div>
           )}
         </div>
 
         <div className="product-detail__info">
-          <p className="section-eyebrow">{category.label}</p>
+          <p className="section-eyebrow">
+            {category.label}
+            {product.version ? ` · ${product.version}` : ""}
+          </p>
           <h1>{product.name}</h1>
-          <p className="product-detail__price">{formatPrice(product.price)}</p>
+          {typeof product.price === "number" ? (
+            <p className="product-detail__price">{formatPrice(product.price)}</p>
+          ) : (
+            <p className="product-detail__price product-detail__price--soon">
+              Price coming soon
+            </p>
+          )}
           <p className="product-detail__desc">{product.description}</p>
+
+          {colors.length > 0 ? (
+            <div>
+              <p className="section-eyebrow" style={{ marginBottom: "0.65rem" }}>
+                Colour — {activeColor?.name}
+              </p>
+              <div className="color-row" role="listbox" aria-label="Colours">
+                {colors.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    role="option"
+                    aria-selected={colorId === c.id}
+                    className={`color-swatch${colorId === c.id ? " is-active" : ""}`}
+                    style={{ background: c.hex }}
+                    title={c.name}
+                    onClick={() => setColorId(c.id)}
+                  >
+                    <span className="sr-only">{c.name}</span>
+                  </button>
+                ))}
+              </div>
+              {!activeColor?.image ? (
+                <p className="section-copy" style={{ marginTop: "0.65rem" }}>
+                  Photo for this colour coming soon.
+                </p>
+              ) : null}
+            </div>
+          ) : null}
 
           {sizes.length > 0 ? (
             <div>
@@ -78,6 +142,28 @@ export function ProductPage() {
                   >
                     {s}
                   </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {relatedVersions.length > 0 ? (
+            <div>
+              <p className="section-eyebrow" style={{ marginBottom: "0.65rem" }}>
+                Other versions
+              </p>
+              <div className="version-row">
+                <span className="version-chip is-active">
+                  {product.version ?? product.name}
+                </span>
+                {relatedVersions.map((v) => (
+                  <Link
+                    key={v.id}
+                    to={`/product/${v.id}`}
+                    className="version-chip"
+                  >
+                    {v.version ?? v.name}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -105,18 +191,15 @@ export function ProductPage() {
             disabled={!canAdd}
             onClick={() => {
               for (let i = 0; i < qtyPreview; i += 1) {
-                addItem(product.id, size || undefined);
+                addItem(product.id, {
+                  size: size || undefined,
+                  colorId: colorId || undefined,
+                });
               }
             }}
           >
             Add to bag
           </button>
-
-          <p className="section-copy">
-            Photo placeholder — upload your image to{" "}
-            <code>public/products/</code> and set the product{" "}
-            <code>image</code> field.
-          </p>
         </div>
       </div>
     </div>

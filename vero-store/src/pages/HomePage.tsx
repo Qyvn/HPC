@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
-import { CATEGORIES, products } from "../data/products";
+import { CATEGORIES, getProductImage, products } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
+
+const CATEGORY_IMAGES: Partial<Record<string, string>> = {
+  "couch-bags": "/products/bags/tabby-taupe.jpg",
+};
 
 export function HomePage() {
   const arrivals = products.filter((p) => p.newArrival).slice(0, 8);
-  const featured = products.find((p) => p.id === "cologne-vero-noir");
+  const featuredBag = products.find((p) => p.id === "bag-quilted-chain");
+  const featuredBagImage = featuredBag
+    ? getProductImage(featuredBag)
+    : undefined;
 
   return (
     <div className="page">
@@ -25,8 +32,8 @@ export function HomePage() {
             <Link to="/shop" className="btn btn-primary">
               Shop the edit
             </Link>
-            <Link to="/shop/weaves" className="btn btn-ghost">
-              Explore weaves
+            <Link to="/shop/couch-bags" className="btn btn-ghost">
+              Explore bags
             </Link>
           </div>
         </div>
@@ -38,8 +45,7 @@ export function HomePage() {
             <p className="section-eyebrow">Categories</p>
             <h2 className="section-title">Four lines. One house.</h2>
             <p className="section-copy">
-              Browse the collection — product photos can be dropped in when
-              you&apos;re ready.
+              Browse the collection — more product photos welcome anytime.
             </p>
           </div>
           <div className="category-rail">
@@ -47,7 +53,15 @@ export function HomePage() {
               <Link key={c.id} to={`/shop/${c.id}`} className="category-tile">
                 <div
                   className="category-tile__bg"
-                  style={{ background: c.tone }}
+                  style={
+                    CATEGORY_IMAGES[c.id]
+                      ? {
+                          backgroundImage: `url(${CATEGORY_IMAGES[c.id]})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }
+                      : { background: c.tone }
+                  }
                 />
                 <span className="category-tile__label">{c.label}</span>
               </Link>
@@ -73,23 +87,34 @@ export function HomePage() {
         </div>
       </section>
 
-      {featured ? (
+      {featuredBag ? (
         <section className="container-wide" style={{ paddingBottom: "5rem" }}>
           <div className="spotlight">
             <div
               className="spotlight__media"
-              style={{
-                background:
-                  "linear-gradient(135deg, #0d0d0d, #2a2420 40%, #b8955a 120%)",
-              }}
+              style={
+                featuredBagImage
+                  ? {
+                      backgroundImage: `url(${featuredBagImage})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }
+                  : {
+                      background:
+                        "linear-gradient(135deg, #0d0d0d, #2a2420 40%, #b8955a 120%)",
+                    }
+              }
             />
             <div className="spotlight__body">
-              <p className="section-eyebrow">Signature scent</p>
-              <h2 className="section-title">{featured.name}</h2>
-              <p className="section-copy">{featured.description}</p>
+              <p className="section-eyebrow">Couch bags</p>
+              <h2 className="section-title">{featuredBag.name}</h2>
+              <p className="section-copy">{featuredBag.description}</p>
               <div>
-                <Link to={`/product/${featured.id}`} className="btn btn-primary">
-                  View cologne
+                <Link
+                  to={`/product/${featuredBag.id}`}
+                  className="btn btn-primary"
+                >
+                  View versions
                 </Link>
               </div>
             </div>

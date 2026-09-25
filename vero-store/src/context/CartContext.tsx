@@ -9,10 +9,16 @@ import {
 } from "react";
 import { getProduct, type Product } from "../data/products";
 
+export type CartOptions = {
+  size?: string;
+  colorId?: string;
+};
+
 export type CartLine = {
   key: string;
   productId: string;
   size?: string;
+  colorId?: string;
   qty: number;
 };
 
@@ -22,19 +28,20 @@ type CartContextValue = {
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-  addItem: (productId: string, size?: string) => void;
+  addItem: (productId: string, options?: CartOptions) => void;
   removeItem: (key: string) => void;
   setQty: (key: string, qty: number) => void;
   itemCount: number;
   subtotal: number;
+  hasPricedItems: boolean;
   enriched: Array<CartLine & { product: Product }>;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
-const STORAGE_KEY = "vero-cart-v1";
+const STORAGE_KEY = "vero-cart-v2";
 
-function lineKey(productId: string, size?: string) {
-  return `${productId}::${size ?? "default"}`;
+function lineKey(productId: string, options?: CartOptions) {
+  return `${productId}::${options?.colorId ?? "default"}::${options?.size ?? "default"}`;
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -60,8 +67,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const closeCart = useCallback(() => setIsOpen(false), []);
   const toggleCart = useCallback(() => setIsOpen((v) => !v), []);
 
-  const addItem = useCallback((productId: string, size?: string) => {
-    const key = lineKey(productId, size);
+  const addItem = useCallback((productId: string, options?: CartOptions) => {
+    const key = lineKey(productId, options);
     setLines((prev) => {
       const existing = prev.find((l) => l.key === key);
       if (existing) {
@@ -69,7 +76,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
           l.key === key ? { ...l, qty: l.qty + 1 } : l,
         );
       }
-      return [...prev, { key, productId, size, qty: 1 }];
+      return [
+        ...prev,
+        {
+          key,
+          productId,
+          size: options?.size,
+          colorId: options?.colorId,
+          qty: 1,
+        },
+      ];
     });
     setIsOpen(true);
   }, []);
@@ -101,8 +117,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [lines],
   );
 
+  const hasPricedItems = useMemo(
+    () => enriched.some((l) => typeof l.product.price === "number"),
+    [enriched],
+  );
+
   const subtotal = useMemo(
-    () => enriched.reduce((sum, l) => sum + l.product.price * l.qty, 0),
+    () =>
+      enriched.reduce(
+        (sum, l) =>
+          sum +
+          (typeof l.product.price === "number"
+            ? l.product.price * l.qty
+            : 0),
+        0,
+      ),
     [enriched],
   );
 
@@ -118,6 +147,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setQty,
       itemCount,
       subtotal,
+      hasPricedItems,
       enriched,
     }),
     [
@@ -131,6 +161,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setQty,
       itemCount,
       subtotal,
+      hasPricedItems,
       enriched,
     ],
   );
