@@ -282,6 +282,51 @@ p {
   object-fit: contain;
 }
 
+.water-wordmark {
+  display: block;
+  overflow: visible;
+}
+
+.water-wordmark__text {
+  font-family: var(--font-display);
+  font-size: 78px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.water-wordmark--nav {
+  width: auto;
+  height: 2.35rem;
+}
+
+.water-wordmark--hero {
+  width: min(320px, 78vw);
+  height: auto;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35));
+  animation: brand-in 1.15s var(--ease-out) both;
+}
+
+.water-wordmark__wave {
+  transform-origin: center;
+  animation: water-sway 9s ease-in-out infinite;
+}
+
+@keyframes water-sway {
+  0%,
+  100% {
+    transform: translateY(0) skewX(0deg);
+  }
+  25% {
+    transform: translateY(-1.5px) skewX(0.4deg);
+  }
+  50% {
+    transform: translateY(1px) skewX(-0.35deg);
+  }
+  75% {
+    transform: translateY(-0.8px) skewX(0.25deg);
+  }
+}
+
 .cart-trigger {
   position: relative;
   display: inline-flex;
@@ -406,10 +451,8 @@ p {
 }
 
 .hero__brand {
-  width: min(280px, 70vw);
+  width: min(320px, 78vw);
   height: auto;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
-  animation: brand-in 1.15s var(--ease-out) both;
 }
 
 .hero__headline {
@@ -1220,9 +1263,8 @@ p {
   margin-bottom: 2.5rem;
 }
 
-.site-footer__brand img {
+.site-footer__brand .water-wordmark--nav {
   height: 2rem;
-  width: auto;
 }
 
 .site-footer__brand p {

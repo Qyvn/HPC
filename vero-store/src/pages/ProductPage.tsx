@@ -6,7 +6,7 @@ import {
   getProduct,
   getProductColor,
   getProductImage,
-  products,
+  relatedVersions,
 } from "../data/products";
 import { useCart } from "../context/CartContext";
 
@@ -30,11 +30,9 @@ export function ProductPage() {
   const activeColor = product ? getProductColor(product, colorId) : undefined;
   const image = product ? getProductImage(product, colorId) : undefined;
 
-  const relatedVersions = useMemo(() => {
-    if (!product || product.category !== "couch-bags") return [];
-    return products.filter(
-      (p) => p.category === "couch-bags" && p.id !== product.id,
-    );
+  const otherVersions = useMemo(() => {
+    if (!product) return [];
+    return relatedVersions(product);
   }, [product]);
 
   const canAdd = useMemo(() => {
@@ -147,7 +145,7 @@ export function ProductPage() {
             </div>
           ) : null}
 
-          {relatedVersions.length > 0 ? (
+          {otherVersions.length > 0 ? (
             <div>
               <p className="section-eyebrow" style={{ marginBottom: "0.65rem" }}>
                 Other versions
@@ -156,7 +154,7 @@ export function ProductPage() {
                 <span className="version-chip is-active">
                   {product.version ?? product.name}
                 </span>
-                {relatedVersions.map((v) => (
+                {otherVersions.map((v) => (
                   <Link
                     key={v.id}
                     to={`/product/${v.id}`}

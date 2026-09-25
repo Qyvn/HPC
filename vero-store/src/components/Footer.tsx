@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { CATEGORIES } from "../data/products";
+import { WaterWordmark } from "./WaterWordmark";
 
 export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container-wide site-footer__grid">
         <div className="site-footer__brand">
-          <Link to="/">
-            <img src="/brand/vero-logo.png" alt="VÉRO" />
+          <Link to="/" aria-label="VÉRO home">
+            <WaterWordmark size="nav" />
           </Link>
           <p>
             Editorial essentials — weaves, couch bags, colognes, and plain tees.

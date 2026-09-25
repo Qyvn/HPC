@@ -59,33 +59,88 @@ export const CATEGORIES: {
 ];
 
 export const products: Product[] = [
+  /* ——— Weaves ——— */
   {
-    id: "weave-silk-noir",
-    name: "Silk Noir Weave",
+    id: "weave-body-wave",
+    name: "Body Wave",
     category: "weaves",
-    price: 189,
+    version: "Wave",
     description:
-      "A deep, luminous weave with soft movement and a refined finish. Placeholder listing — swap in your product photo when ready.",
+      "Soft S-wave with natural bounce and shine. Lengths that move — your night signature.",
     featured: true,
     newArrival: true,
+    sizes: ["14\"", "18\"", "22\"", "26\""],
+    colors: [
+      { id: "noir", name: "Noir", hex: "#1a1410" },
+      { id: "champagne", name: "Champagne", hex: "#c4a574" },
+      { id: "honey", name: "Honey", hex: "#b8864a" },
+      { id: "mocha", name: "Mocha", hex: "#4a3428" },
+    ],
   },
   {
-    id: "weave-champagne",
-    name: "Champagne Soft Wave",
+    id: "weave-silk-straight",
+    name: "Silk Straight",
     category: "weaves",
-    price: 165,
+    version: "Straight",
     description:
-      "Warm champagne tones with a gentle wave pattern. Upload your weave shot to replace this placeholder.",
+      "Sleek, bone-straight finish with a liquid sheen. Clean editorial line from root to tip.",
+    featured: true,
     newArrival: true,
+    sizes: ["14\"", "18\"", "22\"", "26\""],
+    colors: [
+      { id: "jet", name: "Jet", hex: "#0d0d0d" },
+      { id: "noir", name: "Noir", hex: "#1a1410" },
+      { id: "auburn", name: "Auburn", hex: "#6b3a2a" },
+      { id: "champagne", name: "Champagne", hex: "#c4a574" },
+    ],
   },
   {
-    id: "weave-jet-straight",
-    name: "Jet Straight Length",
+    id: "weave-deep-wave",
+    name: "Deep Wave",
     category: "weaves",
-    price: 149,
+    version: "Deep Wave",
     description:
-      "Sleek, straight length for a sharp editorial line. Photo slot ready for your upload.",
+      "Defined deep waves with soft volume. Full, romantic texture for evening wear.",
+    newArrival: true,
+    sizes: ["14\"", "18\"", "22\"", "26\""],
+    colors: [
+      { id: "noir", name: "Noir", hex: "#1a1410" },
+      { id: "mocha", name: "Mocha", hex: "#4a3428" },
+      { id: "honey", name: "Honey", hex: "#b8864a" },
+      { id: "jet", name: "Jet", hex: "#0d0d0d" },
+    ],
   },
+  {
+    id: "weave-soft-curl",
+    name: "Soft Curl",
+    category: "weaves",
+    version: "Curl",
+    description:
+      "Loose curl pattern with airy movement. Easy glam, low fuss.",
+    sizes: ["14\"", "18\"", "22\""],
+    colors: [
+      { id: "champagne", name: "Champagne", hex: "#c4a574" },
+      { id: "honey", name: "Honey", hex: "#b8864a" },
+      { id: "auburn", name: "Auburn", hex: "#6b3a2a" },
+      { id: "noir", name: "Noir", hex: "#1a1410" },
+    ],
+  },
+  {
+    id: "weave-kinky-blowout",
+    name: "Kinky Blowout",
+    category: "weaves",
+    version: "Texture",
+    description:
+      "Natural-looking blowout texture with soft density. Seamless blend energy.",
+    sizes: ["14\"", "18\"", "22\""],
+    colors: [
+      { id: "noir", name: "Noir", hex: "#1a1410" },
+      { id: "mocha", name: "Mocha", hex: "#4a3428" },
+      { id: "jet", name: "Jet", hex: "#0d0d0d" },
+    ],
+  },
+
+  /* ——— Couch bags ——— */
   {
     id: "bag-tabby-shoulder",
     name: "Tabby Shoulder",
@@ -130,64 +185,144 @@ export const products: Product[] = [
       { id: "wine", name: "Wine", hex: "#5a2a32" },
     ],
   },
+
+  /* ——— Colognes ——— */
   {
     id: "cologne-vero-noir",
     name: "VÉRO Noir",
     category: "colognes",
-    price: 86,
+    version: "Signature",
     description:
-      "Dark woods and soft musk. A signature scent — drop in your bottle shot when ready.",
+      "Dark woods and soft musk. A quiet trail that stays close — your signature scent.",
     featured: true,
     newArrival: true,
-    sizes: ["50ml", "100ml"],
+    sizes: ["30ml", "50ml", "100ml"],
+    colors: [
+      { id: "noir", name: "Noir bottle", hex: "#111111" },
+      { id: "clear", name: "Clear bottle", hex: "#d8d4cc" },
+    ],
   },
   {
     id: "cologne-air-blanc",
     name: "Air Blanc",
     category: "colognes",
-    price: 78,
+    version: "Fresh",
     description:
-      "Crisp citrus opening with a clean dry-down. Placeholder until your cologne photo arrives.",
-    sizes: ["50ml", "100ml"],
+      "Crisp citrus opening with a clean linen dry-down. Light, bright, everyday.",
+    newArrival: true,
+    sizes: ["30ml", "50ml", "100ml"],
+    colors: [
+      { id: "clear", name: "Clear bottle", hex: "#e8e4dc" },
+      { id: "frost", name: "Frosted", hex: "#cfc9be" },
+    ],
   },
   {
     id: "cologne-ember",
     name: "Ember Vetiver",
     category: "colognes",
-    price: 92,
+    version: "Warm",
     description:
-      "Smoked vetiver and warm spice. Ready for your product imagery.",
+      "Smoked vetiver, warm spice, and soft amber. Evening heat in a bottle.",
+    featured: true,
     sizes: ["50ml", "100ml"],
+    colors: [
+      { id: "amber", name: "Amber bottle", hex: "#6b4226" },
+      { id: "noir", name: "Noir bottle", hex: "#1a1a1a" },
+    ],
   },
   {
-    id: "tee-core-black",
-    name: "Core Tee — Black",
-    category: "tees",
-    price: 38,
+    id: "cologne-salt-cedar",
+    name: "Salt & Cedar",
+    category: "colognes",
+    version: "Coastal",
     description:
-      "Heavyweight plain tee in black. Clean neckline, easy drape. Upload your tee flat-lay or model shot.",
+      "Sea salt, cedarwood, and pale musk. Clean air after rain.",
+    newArrival: true,
+    sizes: ["50ml", "100ml"],
+    colors: [
+      { id: "sea", name: "Sea glass", hex: "#7a8b84" },
+      { id: "clear", name: "Clear bottle", hex: "#d8d4cc" },
+    ],
+  },
+  {
+    id: "cologne-oro",
+    name: "Oro",
+    category: "colognes",
+    version: "Golden",
+    description:
+      "Saffron, soft leather, and warm gold florals. Luxe without the shout.",
+    sizes: ["50ml", "100ml"],
+    colors: [
+      { id: "gold", name: "Gold bottle", hex: "#b8955a" },
+      { id: "noir", name: "Noir bottle", hex: "#111111" },
+    ],
+  },
+
+  /* ——— Tees ——— */
+  {
+    id: "tee-core",
+    name: "Core Tee",
+    category: "tees",
+    version: "Classic",
+    description:
+      "Heavyweight plain tee. Clean neckline, easy drape — the everyday essential.",
     featured: true,
     newArrival: true,
     sizes: ["XS", "S", "M", "L", "XL"],
+    colors: [
+      { id: "black", name: "Black", hex: "#111111" },
+      { id: "white", name: "White", hex: "#f5f3ee" },
+      { id: "stone", name: "Stone", hex: "#b5aea3" },
+      { id: "ink", name: "Ink", hex: "#2c3340" },
+      { id: "sand", name: "Sand", hex: "#d6c8b0" },
+    ],
   },
   {
-    id: "tee-core-white",
-    name: "Core Tee — White",
+    id: "tee-oversized",
+    name: "Oversized Tee",
     category: "tees",
-    price: 38,
+    version: "Oversized",
     description:
-      "Essential white tee with a refined fit. Placeholder until your photos land.",
-    sizes: ["XS", "S", "M", "L", "XL"],
-  },
-  {
-    id: "tee-core-stone",
-    name: "Core Tee — Stone",
-    category: "tees",
-    price: 38,
-    description:
-      "Soft stone wash plain tee. Swap this placeholder for your product image anytime.",
+      "Relaxed drop shoulder and longer hem. Soft cotton with an easy street cut.",
     newArrival: true,
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { id: "black", name: "Black", hex: "#111111" },
+      { id: "white", name: "White", hex: "#f5f3ee" },
+      { id: "stone", name: "Stone", hex: "#b5aea3" },
+      { id: "olive", name: "Olive", hex: "#5c6048" },
+    ],
+  },
+  {
+    id: "tee-slim",
+    name: "Slim Tee",
+    category: "tees",
+    version: "Slim",
+    description:
+      "Closer fit through the body. Minimal seams, sharp silhouette.",
     sizes: ["XS", "S", "M", "L", "XL"],
+    colors: [
+      { id: "black", name: "Black", hex: "#111111" },
+      { id: "white", name: "White", hex: "#f5f3ee" },
+      { id: "ink", name: "Ink", hex: "#2c3340" },
+      { id: "espresso", name: "Espresso", hex: "#3b2a22" },
+    ],
+  },
+  {
+    id: "tee-longsleeve",
+    name: "Long Sleeve Tee",
+    category: "tees",
+    version: "Long Sleeve",
+    description:
+      "Same plain essential, extended. Soft cuff, clean crew neck.",
+    newArrival: true,
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { id: "black", name: "Black", hex: "#111111" },
+      { id: "white", name: "White", hex: "#f5f3ee" },
+      { id: "stone", name: "Stone", hex: "#b5aea3" },
+      { id: "sand", name: "Sand", hex: "#d6c8b0" },
+    ],
   },
 ];
 
@@ -228,5 +363,11 @@ export function getProductColor(product: Product, colorId?: string) {
   if (!product.colors?.length) return undefined;
   return (
     product.colors.find((c) => c.id === colorId) ?? product.colors[0]
+  );
+}
+
+export function relatedVersions(product: Product) {
+  return products.filter(
+    (p) => p.category === product.category && p.id !== product.id && p.version,
   );
 }

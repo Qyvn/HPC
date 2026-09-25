@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "../data/products";
 import { useCart } from "../context/CartContext";
+import { WaterWordmark } from "./WaterWordmark";
 
 export function Header() {
   const { itemCount, openCart } = useCart();
@@ -74,7 +75,7 @@ export function Header() {
           </nav>
 
           <Link to="/" className="brand-mark" aria-label="VÉRO home">
-            <img src="/brand/vero-logo.png" alt="VÉRO" />
+            <WaterWordmark size="nav" />
           </Link>
 
           <div className="site-header__nav site-header__nav--right">

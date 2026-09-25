@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CATEGORIES, getProductImage, products } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
 import { Reveal } from "../components/Reveal";
+import { WaterWordmark } from "../components/WaterWordmark";
 
 const CATEGORY_IMAGES: Partial<Record<string, string>> = {
   "couch-bags": "/products/bags/tabby-taupe.jpg",
@@ -32,11 +33,7 @@ export function HomePage() {
           aria-hidden="true"
         />
         <div className="hero__content">
-          <img
-            className="hero__brand"
-            src="/brand/vero-logo.png"
-            alt="VÉRO"
-          />
+          <WaterWordmark size="hero" className="hero__brand" />
           <h1 className="hero__headline">Your signature.</h1>
           <p className="hero__copy">
             Editorial essentials — weaves, couch bags, colognes, and plain tees.
