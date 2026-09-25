@@ -7,4 +7,10 @@ const isGitHubPages = process.env.GITHUB_PAGES === "true";
 export default defineConfig({
   plugins: [react()],
   base: isGitHubPages ? "/HPC/" : "/",
+  preview: {
+    allowedHosts: true,
+  },
+  server: {
+    allowedHosts: true,
+  },
 });
