@@ -7,7 +7,7 @@ export function Footer() {
       <div className="container-wide site-footer__grid">
         <div className="site-footer__brand">
           <Link to="/">
-            <img src="/brand/vero-logo.jpg" alt="VÉRO" />
+            <img src="/brand/vero-logo.png" alt="VÉRO" />
           </Link>
           <p>
             Editorial essentials — weaves, couch bags, colognes, and plain tees.

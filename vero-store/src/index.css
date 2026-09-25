@@ -198,7 +198,6 @@ p {
   height: 2.35rem;
   width: auto;
   object-fit: contain;
-  background: #000;
 }
 
 .cart-trigger {
@@ -318,6 +317,10 @@ p {
   height: auto;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
   animation: brand-in 1.15s var(--ease-out) both;
+}
+
+.hero__brand-plate {
+  display: none;
 }
 
 .hero__headline {
@@ -866,7 +869,6 @@ p {
 .site-footer__brand img {
   height: 2rem;
   width: auto;
-  background: #000;
 }
 
 .site-footer__brand p {

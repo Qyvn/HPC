@@ -48,7 +48,7 @@ export function Header() {
           </nav>
 
           <Link to="/" className="brand-mark" aria-label="VÉRO home">
-            <img src="/brand/vero-logo.jpg" alt="VÉRO" />
+            <img src="/brand/vero-logo.png" alt="VÉRO" />
           </Link>
 
           <div className="site-header__nav site-header__nav--right">

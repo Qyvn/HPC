@@ -13,7 +13,7 @@ export function HomePage() {
         <div className="hero__content">
           <img
             className="hero__brand"
-            src="/brand/vero-logo.jpg"
+            src="/brand/vero-logo.png"
             alt="VÉRO"
           />
           <h1 className="hero__headline">Cut clean. Worn bold.</h1>
