@@ -1,8 +1,12 @@
-# VÉRO
+# High Performers Club + VÉRO
 
-Editorial e-commerce for **VÉRO** — weaves, couch bags, colognes, and plain t-shirts.
+## High Performers Club
+Marketing site for High Performers Club.
 
-## Local development
+**Production:** https://highperformersclub.co.za
+
+## VÉRO storefront
+Editorial e-commerce app in `vero-store/` (weaves, couch bags, colognes, plain tees).
 
 ```bash
 cd vero-store
@@ -10,6 +14,4 @@ npm install
 npm run dev
 ```
 
-## Product photos
-
-Drop images into `vero-store/public/products/`, then set each product's `image` path in `vero-store/src/data/products.ts`.
+GitHub Pages deploy (after enabling Pages on this repo): source **GitHub Actions** or the `gh-pages` branch → https://qyvn.github.io/HPC/

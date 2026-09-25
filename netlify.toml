@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  command = "echo 'Static site — no build'"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/ops"
+  to = "/ops/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
