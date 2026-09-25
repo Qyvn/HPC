@@ -1,6 +1,11 @@
 {
-  "name": "hpc",
+  "name": "vero",
   "version": "1.0.0",
   "private": true,
-  "description": "High Performers Club static site + ops functions"
+  "description": "VÉRO e-commerce storefront",
+  "scripts": {
+    "dev": "npm --prefix vero-store run dev",
+    "build": "npm --prefix vero-store run build",
+    "preview": "npm --prefix vero-store run preview"
+  }
 }
