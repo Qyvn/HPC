@@ -3,6 +3,12 @@
   command = "echo 'Static site — no build'"
   functions = "netlify/functions"
 
+# VÉRO SPA under /vero/ — does not affect HPC root pages
+[[redirects]]
+  from = "/vero/*"
+  to = "/vero/index.html"
+  status = 200
+
 [[redirects]]
   from = "/ops"
   to = "/ops/index.html"

@@ -9,6 +9,7 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 **Admin:** https://app.netlify.com/projects/high-performers-club  
 **Privacy:** https://highperformersclub.co.za/privacy  
 **Ops CRM:** https://highperformersclub.co.za/ops  
+**VÉRO store:** https://highperformersclub.co.za/vero/  
 
 ### Applications
 
@@ -20,6 +21,14 @@ Marketing site for High Performers Club — an elite athletic club for entrepren
 Form fields: name, email, lane, why.
 
 Redeploy after changes: `npx netlify deploy --prod --dir=.`
+
+## VÉRO
+
+The VÉRO e-commerce app is isolated under `/vero/` so the HPC homepage and ops tools stay unchanged.
+
+- Source: `vero-store/`
+- Published build: `vero/`
+- Rebuild notes: see `vero-store/README.md`
 
 ## Domain email
 

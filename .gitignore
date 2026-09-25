@@ -1,2 +1,9 @@
 # Local Netlify folder
 .netlify
+
+# Dependencies
+node_modules/
+vero-store/node_modules/
+vero-store/dist/
+*.local
+.DS_Store
