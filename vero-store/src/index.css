@@ -198,8 +198,7 @@ p {
   height: 2.35rem;
   width: auto;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: contrast(1.05);
+  background: #000;
 }
 
 .cart-trigger {
@@ -867,7 +866,7 @@ p {
 .site-footer__brand img {
   height: 2rem;
   width: auto;
-  mix-blend-mode: multiply;
+  background: #000;
 }
 
 .site-footer__brand p {

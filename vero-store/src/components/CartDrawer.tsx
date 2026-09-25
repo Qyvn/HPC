@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatPrice } from "../data/products";
+import { formatPrice, getCategory } from "../data/products";
 import { useCart } from "../context/CartContext";
 
 export function CartDrawer() {
@@ -48,7 +48,11 @@ export function CartDrawer() {
                   ) : (
                     <div
                       className="product-card__placeholder"
-                      style={{ minHeight: "100%" }}
+                      style={{
+                        minHeight: "100%",
+                        background: getCategory(line.product.category)?.tone,
+                      }}
+                      aria-hidden
                     />
                   )}
                 </Link>
