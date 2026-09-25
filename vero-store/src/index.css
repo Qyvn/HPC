@@ -319,10 +319,6 @@ p {
   animation: brand-in 1.15s var(--ease-out) both;
 }
 
-.hero__brand-plate {
-  display: none;
-}
-
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 400;
