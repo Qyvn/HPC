@@ -1,19 +1,25 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "../data/products";
 import { useCart } from "../context/CartContext";
 
 export function Header() {
   const { itemCount, openCart } = useCart();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const close = () => setMenuOpen(false);
@@ -21,9 +27,29 @@ export function Header() {
     return () => window.removeEventListener("resize", close);
   }, []);
 
+  const solid = !isHome || scrolled || menuOpen;
+
   return (
     <>
-      <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
+      <div className="announcement" role="note">
+        <div className="announcement__track">
+          <span>Your signature</span>
+          <span aria-hidden>·</span>
+          <span>New couch bags</span>
+          <span aria-hidden>·</span>
+          <span>Weaves · Colognes · Tees</span>
+          <span aria-hidden>·</span>
+          <span>Your signature</span>
+          <span aria-hidden>·</span>
+          <span>New couch bags</span>
+          <span aria-hidden>·</span>
+          <span>Weaves · Colognes · Tees</span>
+        </div>
+      </div>
+
+      <header
+        className={`site-header${solid ? " is-solid" : " is-over-hero"}${scrolled ? " is-scrolled" : ""}`}
+      >
         <div className="site-header__inner">
           <nav className="site-header__nav site-header__nav--left" aria-label="Primary">
             <NavLink

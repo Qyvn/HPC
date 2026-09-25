@@ -63,7 +63,7 @@ export function Footer() {
 
       <div className="container-wide site-footer__bottom">
         <span>© {new Date().getFullYear()} VÉRO</span>
-        <span>Product photos welcome — drop them in anytime</span>
+        <span>Your signature.</span>
       </div>
     </footer>
   );

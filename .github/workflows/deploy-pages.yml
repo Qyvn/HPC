@@ -2,7 +2,7 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, cursor/vero-ecommerce-e47e]
   workflow_dispatch:
 
 permissions:
@@ -24,13 +24,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vero-store/package-lock.json
+
+      - name: Install and build VÉRO store
+        working-directory: vero-store
+        env:
+          GITHUB_PAGES: "true"
+        run: |
+          npm ci
+          npm run build
+          cp dist/index.html dist/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: vero-store/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
