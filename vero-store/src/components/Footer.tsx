@@ -11,7 +11,7 @@ export function Footer() {
           </Link>
           <p>
             Editorial essentials — weaves, couch bags, colognes, and plain tees.
-            Quiet luxury, everyday wear.
+            Your signature.
           </p>
         </div>
 

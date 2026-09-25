@@ -16,10 +16,10 @@ export function HomePage() {
             src="/brand/vero-logo.png"
             alt="VÉRO"
           />
-          <h1 className="hero__headline">Cut clean. Worn bold.</h1>
+          <h1 className="hero__headline">Your signature.</h1>
           <p className="hero__copy">
-            Weaves, couch bags, colognes, and plain tees — an editorial edit for
-            everyday presence.
+            Weaves, couch bags, colognes, and plain tees — pieces that mark how
+            you show up.
           </p>
           <div className="hero__actions">
             <Link to="/shop" className="btn btn-primary">

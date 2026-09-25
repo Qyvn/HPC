@@ -40,7 +40,7 @@ export const CATEGORIES: {
   {
     id: "tees",
     label: "Plain T-Shirts",
-    blurb: "Essential cotton. Cut clean. Worn daily.",
+    blurb: "Essential cotton. Your everyday signature.",
     tone: "linear-gradient(145deg, #d9d4cb 0%, #b7b0a4 55%, #8d867a 100%)",
   },
 ];
