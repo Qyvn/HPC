@@ -27,7 +27,7 @@
   <link rel="apple-touch-icon" href="public/assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Michroma&display=swap" rel="stylesheet" />
   <style>
 :root {
   --bg: #050505;
@@ -42,7 +42,7 @@
   --ink: #f2f4f7;
   --muted: #9aa1ab;
   --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
-  --body: "Space Grotesk", "Segoe UI", sans-serif;
+  --body: "Inter", "Segoe UI", sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --nav-h: 72px;
 }
@@ -140,8 +140,9 @@ button { cursor: pointer; border: 0; background: none; }
   gap: 4px;
 }
 .nav-link {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--silver);
@@ -153,8 +154,9 @@ button { cursor: pointer; border: 0; background: none; }
 }
 .nav-link:hover { color: var(--silver-bright); }
 .nav-apply {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   min-height: 44px;
@@ -171,17 +173,94 @@ button { cursor: pointer; border: 0; background: none; }
   background: linear-gradient(180deg, #ffffff 0%, #cfd6e0 100%);
   box-shadow: 0 8px 24px rgba(0,0,0,.35);
 }
-@media (min-width: 860px) {
+.nav-actions {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+.nav-menu-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0;
+  color: var(--silver);
+  transition: color 0.3s var(--ease);
+}
+.nav-menu-btn:hover { color: var(--silver-bright); }
+.nav-menu-btn span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+}
+@media (min-width: 768px) {
   .nav-links { display: flex; }
 }
+@media (max-width: 767px) {
+  .nav-actions { display: flex; }
+}
+
+/* Mobile menu overlay */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  background: #000;
+  padding: 24px clamp(20px, 4vw, 48px);
+}
+.mobile-menu.is-open { display: flex; }
+.mobile-menu-top {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 48px;
+  align-items: center;
+}
+.mobile-menu-close {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--body);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--silver);
+  transition: color 0.3s var(--ease);
+}
+.mobile-menu-close:hover { color: var(--silver-bright); }
+.mobile-menu-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding-bottom: 48px;
+}
+.mobile-menu-nav a {
+  font-family: var(--display);
+  font-size: clamp(1.4rem, 6vw, 2rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--silver-bright);
+  transition: color 0.3s var(--ease);
+}
+.mobile-menu-nav a:hover { color: #fff; }
+body.menu-open { overflow: hidden; }
 
 /* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   min-height: 48px;
@@ -326,8 +405,9 @@ button { cursor: pointer; border: 0; background: none; }
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 8px;
+  font-weight: 500;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--silver-dim);
@@ -373,8 +453,9 @@ section {
 }
 .kicker {
   margin: 0 0 18px;
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--silver-dim);
@@ -446,8 +527,9 @@ section {
 }
 .rule-list li:last-child { border-bottom: 1px solid var(--line); }
 .rule-list span {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.22em;
   color: var(--silver-dim);
 }
@@ -500,8 +582,9 @@ section {
   color: var(--silver-bright);
 }
 .pillar-tag {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 8px;
+  font-weight: 500;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--silver-dim);
@@ -517,16 +600,18 @@ section {
   color: var(--muted);
   flex: 1;
 }
-.pillar-note {
-  margin: 0;
-  padding-top: 4px;
-  font-family: var(--display);
-  font-size: 8px;
-  letter-spacing: 0.2em;
+.pillar-link {
+  margin: 4px 0 0;
+  align-self: flex-start;
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--silver-dim);
-  border-top: 1px solid transparent;
+  color: var(--silver);
+  transition: color 0.3s var(--ease);
 }
+.pillar-link:hover { color: var(--silver-bright); }
 
 /* Content — magazine */
 .content-engine {
@@ -669,8 +754,9 @@ section {
 }
 .entry-step .num {
   display: block;
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.28em;
   color: var(--silver-dim);
   margin-bottom: 14px;
@@ -725,6 +811,7 @@ section {
   text-underline-offset: 3px;
 }
 .apply-form {
+  position: relative;
   border: 1px solid var(--line-strong);
   padding: clamp(26px, 4vw, 40px);
   background: linear-gradient(180deg, #101010 0%, #0a0a0a 100%);
@@ -742,8 +829,9 @@ section {
   gap: 12px;
 }
 .field label {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--silver-dim);
@@ -806,8 +894,10 @@ section {
 }
 .hp-field {
   position: absolute;
-  left: -9999px;
-  height: 0;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
 }
 .apply-form .btn { width: 100%; margin-top: 6px; }
@@ -900,8 +990,9 @@ section {
   flex-wrap: wrap;
   gap: 12px 28px;
   align-items: center;
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--silver-dim);
@@ -927,8 +1018,26 @@ section {
         <a class="nav-link" href="#entry">Entry</a>
         <a class="nav-apply" href="#apply">Apply</a>
       </nav>
-      <a class="nav-apply nav-apply-mobile" href="#apply">Apply</a>
+      <div class="nav-actions">
+        <a class="nav-apply nav-apply-mobile" href="#apply">Apply</a>
+        <button type="button" class="nav-menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </header>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="mobile-menu-top">
+        <button type="button" class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">×</button>
+      </div>
+      <nav class="mobile-menu-nav" aria-label="Mobile">
+        <a href="#standard">Standard</a>
+        <a href="#club">Club</a>
+        <a href="#entry">Entry</a>
+        <a href="#apply">Apply</a>
+      </nav>
+    </div>
 
     <main id="top">
       <section class="hero" aria-label="High Performers Club">
@@ -991,7 +1100,7 @@ section {
                 <span class="pillar-tag is-public">Public</span>
               </div>
               <p>High-signal teaching — bold, clear, and built to raise how you think and operate.</p>
-              <p class="pillar-note">Open signal</p>
+              <a class="pillar-link" href="https://youtube.com/@highperformersclubpodcast" target="_blank" rel="noopener noreferrer">Watch the podcast →</a>
             </article>
             <article class="pillar reveal reveal-delay-1">
               <div class="pillar-top">
@@ -999,7 +1108,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>A selective room of operators. Peer pressure with purpose. Decisions sharpened among people who get it.</p>
-              <p class="pillar-note">Closed room · decisions</p>
             </article>
             <article class="pillar reveal reveal-delay-2">
               <div class="pillar-top">
@@ -1007,7 +1115,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Live rooms that feel like game day — intensity, focus, and standards you can feel in the room.</p>
-              <p class="pillar-note">Live intensity</p>
             </article>
             <article class="pillar reveal">
               <div class="pillar-top">
@@ -1015,7 +1122,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Direct guidance for the next level of your craft, business, and personal performance systems.</p>
-              <p class="pillar-note">Direct guidance</p>
             </article>
             <article class="pillar reveal reveal-delay-1">
               <div class="pillar-top">
@@ -1023,7 +1129,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Access to people who move. Introductions, collaboration, and a circle that compounds ambition.</p>
-              <p class="pillar-note">Compounding circle</p>
             </article>
             <article class="pillar reveal reveal-delay-2">
               <div class="pillar-top">
@@ -1031,7 +1136,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Time-bound performance sprints that force reps, accountability, and measurable movement.</p>
-              <p class="pillar-note">Timed sprints</p>
             </article>
           </div>
         </div>
@@ -1128,7 +1232,7 @@ section {
               novalidate
             >
               <input type="hidden" name="form-name" value="apply" />
-              <p class="hp-field">
+              <p class="hp-field" aria-hidden="true">
                 <label>Don’t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
               </p>
               <div class="field" data-field>
@@ -1190,19 +1294,14 @@ section {
           <a href="mailto:apply@highperformersclub.co.za">Email</a>
           <a href="/privacy.html">Privacy</a>
           <a href="#apply">Apply</a>
+          <a href="https://youtube.com/@highperformersclubpodcast" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://instagram.com/highperformersclubhpc" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://x.com/TheHPCClub" target="_blank" rel="noopener noreferrer">X</a>
+          <a href="https://facebook.com/61595048336479" target="_blank" rel="noopener noreferrer">Facebook</a>
         </div>
       </div>
     </footer>
   </div>
-
-  <style>
-    @media (min-width: 860px) {
-      .nav-apply-mobile { display: none; }
-    }
-    @media (max-width: 859px) {
-      .nav-links { display: none !important; }
-    }
-  </style>
 
   <script>
     const nav = document.getElementById("nav");
@@ -1211,6 +1310,43 @@ section {
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    const menuBtn = document.getElementById("nav-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuClose = document.getElementById("mobile-menu-close");
+    const openMenu = () => {
+      if (!mobileMenu || !menuBtn) return;
+      mobileMenu.hidden = false;
+      mobileMenu.classList.add("is-open");
+      menuBtn.setAttribute("aria-expanded", "true");
+      document.body.classList.add("menu-open");
+    };
+    const closeMenu = () => {
+      if (!mobileMenu || !menuBtn) return;
+      mobileMenu.classList.remove("is-open");
+      mobileMenu.hidden = true;
+      menuBtn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("menu-open");
+    };
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener("click", openMenu);
+      if (menuClose) menuClose.addEventListener("click", closeMenu);
+      mobileMenu.querySelectorAll("a[href^='#']").forEach((link) => {
+        link.addEventListener("click", () => {
+          closeMenu();
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && mobileMenu.classList.contains("is-open")) {
+          closeMenu();
+        }
+      });
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768 && mobileMenu.classList.contains("is-open")) {
+          closeMenu();
+        }
+      });
+    }
 
     const reveals = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver(
