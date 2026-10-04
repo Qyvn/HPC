@@ -27,7 +27,7 @@
   <link rel="apple-touch-icon" href="public/assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Michroma&display=swap" rel="stylesheet" />
   <style>
 :root {
   --bg: #050505;
@@ -42,7 +42,7 @@
   --ink: #f2f4f7;
   --muted: #9aa1ab;
   --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
-  --body: "Space Grotesk", "Segoe UI", sans-serif;
+  --body: "Inter", "Segoe UI", sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --nav-h: 72px;
 }
@@ -140,7 +140,8 @@ button { cursor: pointer; border: 0; background: none; }
   gap: 4px;
 }
 .nav-link {
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -153,7 +154,8 @@ button { cursor: pointer; border: 0; background: none; }
 }
 .nav-link:hover { color: var(--silver-bright); }
 .nav-apply {
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -174,13 +176,90 @@ button { cursor: pointer; border: 0; background: none; }
 @media (min-width: 860px) {
   .nav-links { display: flex; }
 }
+.nav-tools {
+  display: none;
+  align-items: center;
+  gap: 2px;
+}
+.nav-toggle {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0;
+  color: var(--silver);
+}
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+}
+.mobile-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 12px) clamp(28px, 8vw, 72px) 48px;
+  background: #050505;
+  overscroll-behavior: none;
+}
+.mobile-nav[hidden] { display: none; }
+.mobile-nav-close {
+  position: absolute;
+  top: 14px;
+  right: clamp(12px, 4vw, 40px);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--silver);
+}
+.mobile-nav nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(8px, 2.4vh, 22px);
+}
+.mobile-nav a {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.45rem, 6vw, 2.15rem);
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--silver-bright);
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+.mobile-nav a:hover { color: #fff; }
+body.menu-open {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
+}
 
 /* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -326,7 +405,8 @@ button { cursor: pointer; border: 0; background: none; }
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 8px;
   letter-spacing: 0.38em;
   text-transform: uppercase;
@@ -373,7 +453,8 @@ section {
 }
 .kicker {
   margin: 0 0 18px;
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.34em;
   text-transform: uppercase;
@@ -446,7 +527,8 @@ section {
 }
 .rule-list li:last-child { border-bottom: 1px solid var(--line); }
 .rule-list span {
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.22em;
   color: var(--silver-dim);
@@ -500,7 +582,8 @@ section {
   color: var(--silver-bright);
 }
 .pillar-tag {
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 8px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -517,16 +600,22 @@ section {
   color: var(--muted);
   flex: 1;
 }
-.pillar-note {
-  margin: 0;
-  padding-top: 4px;
-  font-family: var(--display);
-  font-size: 8px;
-  letter-spacing: 0.2em;
+.room-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 2px;
+  padding: 4px 0 2px;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--silver-dim);
-  border-top: 1px solid transparent;
+  color: var(--silver);
+  transition: color 0.3s var(--ease);
 }
+.room-link:hover { color: var(--silver-bright); }
+.pillar:has(.room-link) p { flex: 0 1 auto; }
 
 /* Content — magazine */
 .content-engine {
@@ -669,7 +758,8 @@ section {
 }
 .entry-step .num {
   display: block;
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.28em;
   color: var(--silver-dim);
@@ -742,7 +832,8 @@ section {
   gap: 12px;
 }
 .field label {
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 9px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -900,7 +991,8 @@ section {
   flex-wrap: wrap;
   gap: 12px 28px;
   align-items: center;
-  font-family: var(--display);
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 9px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -927,8 +1019,24 @@ section {
         <a class="nav-link" href="#entry">Entry</a>
         <a class="nav-apply" href="#apply">Apply</a>
       </nav>
-      <a class="nav-apply nav-apply-mobile" href="#apply">Apply</a>
+      <div class="nav-tools">
+        <a class="nav-apply nav-apply-mobile" href="#apply">Apply</a>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
+
+    <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+      <button type="button" class="mobile-nav-close" aria-label="Close menu">&times;</button>
+      <nav aria-label="Mobile">
+        <a href="#standard">Standard</a>
+        <a href="#club">Club</a>
+        <a href="#entry">Entry</a>
+        <a href="#apply">Apply</a>
+      </nav>
+    </div>
 
     <main id="top">
       <section class="hero" aria-label="High Performers Club">
@@ -991,7 +1099,7 @@ section {
                 <span class="pillar-tag is-public">Public</span>
               </div>
               <p>High-signal teaching — bold, clear, and built to raise how you think and operate.</p>
-              <p class="pillar-note">Open signal</p>
+              <a class="room-link" href="https://youtube.com/@highperformersclubpodcast" target="_blank" rel="noopener">Watch the podcast →</a>
             </article>
             <article class="pillar reveal reveal-delay-1">
               <div class="pillar-top">
@@ -999,7 +1107,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>A selective room of operators. Peer pressure with purpose. Decisions sharpened among people who get it.</p>
-              <p class="pillar-note">Closed room · decisions</p>
             </article>
             <article class="pillar reveal reveal-delay-2">
               <div class="pillar-top">
@@ -1007,7 +1114,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Live rooms that feel like game day — intensity, focus, and standards you can feel in the room.</p>
-              <p class="pillar-note">Live intensity</p>
             </article>
             <article class="pillar reveal">
               <div class="pillar-top">
@@ -1015,7 +1121,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Direct guidance for the next level of your craft, business, and personal performance systems.</p>
-              <p class="pillar-note">Direct guidance</p>
             </article>
             <article class="pillar reveal reveal-delay-1">
               <div class="pillar-top">
@@ -1023,7 +1128,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Access to people who move. Introductions, collaboration, and a circle that compounds ambition.</p>
-              <p class="pillar-note">Compounding circle</p>
             </article>
             <article class="pillar reveal reveal-delay-2">
               <div class="pillar-top">
@@ -1031,7 +1135,6 @@ section {
                 <span class="pillar-tag">Members</span>
               </div>
               <p>Time-bound performance sprints that force reps, accountability, and measurable movement.</p>
-              <p class="pillar-note">Timed sprints</p>
             </article>
           </div>
         </div>
@@ -1128,7 +1231,7 @@ section {
               novalidate
             >
               <input type="hidden" name="form-name" value="apply" />
-              <p class="hp-field">
+              <p class="hp-field" aria-hidden="true">
                 <label>Don’t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
               </p>
               <div class="field" data-field>
@@ -1190,6 +1293,10 @@ section {
           <a href="mailto:apply@highperformersclub.co.za">Email</a>
           <a href="/privacy.html">Privacy</a>
           <a href="#apply">Apply</a>
+          <a href="https://youtube.com/@highperformersclubpodcast" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://instagram.com/highperformersclubhpc" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://x.com/TheHPCClub" target="_blank" rel="noopener">X</a>
+          <a href="https://www.facebook.com/profile.php?id=61595048336479" target="_blank" rel="noopener">Facebook</a>
         </div>
       </div>
     </footer>
@@ -1197,10 +1304,11 @@ section {
 
   <style>
     @media (min-width: 860px) {
-      .nav-apply-mobile { display: none; }
+      .nav-tools { display: none; }
     }
     @media (max-width: 859px) {
       .nav-links { display: none !important; }
+      .nav-tools { display: flex; }
     }
   </style>
 
@@ -1298,6 +1406,98 @@ section {
           }
           HTMLFormElement.prototype.submit.call(form);
         }
+      });
+    }
+
+    const menuToggle = document.querySelector(".nav-toggle");
+    const mobileNav = document.getElementById("mobile-nav");
+    const menuClose = mobileNav ? mobileNav.querySelector(".mobile-nav-close") : null;
+    const shell = document.querySelector(".shell");
+
+    const setBackgroundInert = (on) => {
+      if (!shell) return;
+      shell.querySelectorAll(":scope > header, :scope > main, :scope > footer").forEach((el) => {
+        el.inert = on;
+      });
+    };
+
+    const lockScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.dataset.scrollY = String(y);
+      document.body.style.top = `-${y}px`;
+      document.body.classList.add("menu-open");
+    };
+
+    const unlockScroll = () => {
+      const y = parseInt(document.body.dataset.scrollY || "0", 10);
+      document.body.classList.remove("menu-open");
+      document.body.style.top = "";
+      delete document.body.dataset.scrollY;
+      const root = document.documentElement;
+      const previous = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      window.scrollTo(0, y);
+      root.style.scrollBehavior = previous;
+      return y;
+    };
+
+    const openMenu = () => {
+      if (!menuToggle || !mobileNav) return;
+      mobileNav.hidden = false;
+      menuToggle.setAttribute("aria-expanded", "true");
+      lockScroll();
+      setBackgroundInert(true);
+      if (menuClose) menuClose.focus({ preventScroll: true });
+    };
+
+    const closeMenu = (opts = {}) => {
+      if (!menuToggle || !mobileNav || mobileNav.hidden) return;
+      unlockScroll();
+      mobileNav.hidden = true;
+      menuToggle.setAttribute("aria-expanded", "false");
+      setBackgroundInert(false);
+      if (opts.restoreFocus !== false) menuToggle.focus({ preventScroll: true });
+    };
+
+    if (menuToggle && mobileNav) {
+      menuToggle.addEventListener("click", () => {
+        if (menuToggle.getAttribute("aria-expanded") === "true") closeMenu();
+        else openMenu();
+      });
+      if (menuClose) menuClose.addEventListener("click", () => closeMenu());
+      mobileNav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          const href = link.getAttribute("href");
+          if (!href || !href.startsWith("#") || mobileNav.hidden) return;
+          event.preventDefault();
+          unlockScroll();
+          mobileNav.hidden = true;
+          menuToggle.setAttribute("aria-expanded", "false");
+          setBackgroundInert(false);
+          const target = document.querySelector(href);
+          if (target) {
+            const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+          }
+          history.pushState(null, "", href);
+        });
+      });
+      mobileNav.addEventListener("keydown", (event) => {
+        if (event.key !== "Tab" || mobileNav.hidden) return;
+        const focusable = [...mobileNav.querySelectorAll("button, a")];
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeMenu();
       });
     }
   </script>
