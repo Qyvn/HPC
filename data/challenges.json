@@ -1,0 +1,87 @@
+{
+  "_note": "One entry per day. The key is the date in Africa/Johannesburg, written YYYY-MM-DD. Each entry needs title, instruction (one or two lines), source (the theme or book), and placeholder. Leave placeholder true until the copy is final and in our own words. Keys that are not dates are ignored.",
+  "2026-10-06": {
+    "title": "Name the standard",
+    "instruction": "Write the one standard you will not drop today, in a single sentence.",
+    "source": "Placeholder — The Standard",
+    "placeholder": true
+  },
+  "2026-10-07": {
+    "title": "First rep",
+    "instruction": "Do the hardest useful thing before you open anything else.",
+    "source": "Placeholder — Morning Work",
+    "placeholder": true
+  },
+  "2026-10-08": {
+    "title": "One clean page",
+    "instruction": "Finish one piece of work completely. Leave nothing half-open.",
+    "source": "Placeholder — Craft",
+    "placeholder": true
+  },
+  "2026-10-09": {
+    "title": "The quiet hour",
+    "instruction": "Protect one hour with no inputs. Use it on the work that compounds.",
+    "source": "Placeholder — Attention",
+    "placeholder": true
+  },
+  "2026-10-10": {
+    "title": "Say the number",
+    "instruction": "Write the single metric that would prove today counted.",
+    "source": "Placeholder — Scoreboard",
+    "placeholder": true
+  },
+  "2026-10-11": {
+    "title": "Shorter loop",
+    "instruction": "Cut one step from something you repeat, and ship the simpler version.",
+    "source": "Placeholder — Systems",
+    "placeholder": true
+  },
+  "2026-10-12": {
+    "title": "The room",
+    "instruction": "Tell one person the standard you are holding. Ask nothing back.",
+    "source": "Placeholder — Accountability",
+    "placeholder": true
+  },
+  "2026-10-13": {
+    "title": "Body first",
+    "instruction": "Train, walk, or move before the day makes the decision for you.",
+    "source": "Placeholder — Athletic Club",
+    "placeholder": true
+  },
+  "2026-10-14": {
+    "title": "Close the loop",
+    "instruction": "Finish one conversation or task you have been leaving open.",
+    "source": "Placeholder — Execution",
+    "placeholder": true
+  },
+  "2026-10-15": {
+    "title": "One decision",
+    "instruction": "Make the decision you have been renting time to avoid.",
+    "source": "Placeholder — Operators",
+    "placeholder": true
+  },
+  "2026-10-16": {
+    "title": "Subtract",
+    "instruction": "Remove one commitment that does not serve the standard.",
+    "source": "Placeholder — Focus",
+    "placeholder": true
+  },
+  "2026-10-17": {
+    "title": "Teach it",
+    "instruction": "Explain today’s work in three sentences someone else could use.",
+    "source": "Placeholder — Craft",
+    "placeholder": true
+  },
+  "2026-10-18": {
+    "title": "Recovery rep",
+    "instruction": "Stop on time. Protect sleep like it is part of the work.",
+    "source": "Placeholder — Recovery",
+    "placeholder": true
+  },
+  "2026-10-19": {
+    "title": "Review the week",
+    "instruction": "Name what held and what slipped. Set one standard for tomorrow.",
+    "source": "Placeholder — The Standard",
+    "placeholder": true
+  }
+}

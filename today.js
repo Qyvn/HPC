@@ -1,0 +1,589 @@
+/* Daily page: Johannesburg dates, streak, must-dos, and the email prompt. */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  if (typeof document !== "undefined") api.mount(document);
+  root.HpcToday = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+  const ZONE = "Africa/Johannesburg";
+  const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+  const EMAIL_AFTER = 3;
+  const KEYS = {
+    done: "hpc.today.done",
+    todos: "hpc.today.todos",
+    email: "hpc.today.email",
+  };
+  const FALLBACK = {
+    title: "The day is open.",
+    instruction: "No challenge is set for this date. Keep the standard anyway.",
+    source: "",
+    placeholder: false,
+    fallback: true,
+  };
+
+  function dateKey(date, timeZone) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timeZone || ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(date);
+    const bag = Object.create(null);
+    for (const part of parts) bag[part.type] = part.value;
+    return bag.year + "-" + bag.month + "-" + bag.day;
+  }
+
+  function formatLong(date, timeZone) {
+    const formatted = new Intl.DateTimeFormat("en-GB", {
+      timeZone: timeZone || ZONE,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }).format(date);
+    return formatted + " · Johannesburg";
+  }
+
+  function formatDayLabel(iso) {
+    const parts = iso.split("-").map(Number);
+    const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 10, 0, 0));
+    return new Intl.DateTimeFormat("en-GB", {
+      timeZone: ZONE,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }).format(date);
+  }
+
+  function addDays(iso, amount) {
+    const parts = iso.split("-").map(Number);
+    const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2] + amount));
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    return year + "-" + month + "-" + day;
+  }
+
+  function isRealDate(iso) {
+    if (typeof iso !== "string" || !ISO_DATE.test(iso)) return false;
+    const parts = iso.split("-").map(Number);
+    const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+    return (
+      date.getUTCFullYear() === parts[0] &&
+      date.getUTCMonth() === parts[1] - 1 &&
+      date.getUTCDate() === parts[2]
+    );
+  }
+
+  function normalizeDates(dates) {
+    const set = new Set();
+    if (!Array.isArray(dates)) return set;
+    for (const value of dates) {
+      if (isRealDate(value)) set.add(value);
+    }
+    return set;
+  }
+
+  function withDone(dates, today) {
+    const set = normalizeDates(dates);
+    if (isRealDate(today)) set.add(today);
+    return Array.from(set).sort();
+  }
+
+  function streakCount(set, today) {
+    let cursor = set.has(today) ? today : addDays(today, -1);
+    if (!set.has(cursor)) return 0;
+    let count = 0;
+    while (set.has(cursor) && count < 10000) {
+      count += 1;
+      cursor = addDays(cursor, -1);
+    }
+    return count;
+  }
+
+  function countOnOrBefore(set, today) {
+    let count = 0;
+    set.forEach(function (date) {
+      if (date <= today) count += 1;
+    });
+    return count;
+  }
+
+  function completionState(dates, today, windowSize) {
+    const size = windowSize || 14;
+    const set = dates instanceof Set ? dates : normalizeDates(dates);
+    const days = [];
+    for (let i = size - 1; i >= 0; i -= 1) {
+      const date = addDays(today, -i);
+      days.push({
+        date: date,
+        lit: set.has(date),
+        today: date === today,
+        older: days.length < size - 7,
+      });
+    }
+    return {
+      streak: streakCount(set, today),
+      todayDone: set.has(today),
+      total: countOnOrBefore(set, today),
+      days: days,
+    };
+  }
+
+  function lookupChallenge(data, iso) {
+    if (!data || typeof data !== "object" || !isRealDate(iso)) return null;
+    const entry = data[iso];
+    if (!entry || typeof entry !== "object") return null;
+    const title = typeof entry.title === "string" ? entry.title.trim() : "";
+    const instruction = typeof entry.instruction === "string" ? entry.instruction.trim() : "";
+    if (!title || !instruction) return null;
+    const source = typeof entry.source === "string" ? entry.source.trim() : "";
+    return {
+      title: title,
+      instruction: instruction,
+      source: source,
+      placeholder: entry.placeholder === true,
+      fallback: false,
+    };
+  }
+
+  function challengeFor(data, iso) {
+    return lookupChallenge(data, iso) || FALLBACK;
+  }
+
+  function tomorrowLine(data, today) {
+    const next = lookupChallenge(data, addDays(today, 1));
+    if (!next) return "Tomorrow isn’t set yet.";
+    const title = next.title.replace(/[.!?]+$/, "");
+    return "Tomorrow — " + title + ".";
+  }
+
+  function loadTodos(stored, today) {
+    const blank = [
+      { text: "", done: false },
+      { text: "", done: false },
+      { text: "", done: false },
+    ];
+    if (!stored || typeof stored !== "object" || stored.date !== today || !Array.isArray(stored.items)) {
+      return blank;
+    }
+    return [0, 1, 2].map(function (index) {
+      const item = stored.items[index] || {};
+      return {
+        text: typeof item.text === "string" ? item.text.slice(0, 140) : "",
+        done: item.done === true,
+      };
+    });
+  }
+
+  function shouldOfferEmail(total, optedIn) {
+    return total >= EMAIL_AFTER && !optedIn;
+  }
+
+  function createStore(storage) {
+    const memory = new Map();
+    return {
+      get: function (key) {
+        try {
+          if (storage) return storage.getItem(key);
+        } catch (err) {
+          /* private mode */
+        }
+        return memory.has(key) ? memory.get(key) : null;
+      },
+      set: function (key, value) {
+        memory.set(key, value);
+        try {
+          if (storage) storage.setItem(key, value);
+        } catch (err) {
+          /* private mode */
+        }
+      },
+    };
+  }
+
+  function parseJson(raw, fallback) {
+    try {
+      return raw ? JSON.parse(raw) : fallback;
+    } catch (err) {
+      return fallback;
+    }
+  }
+
+  function mount(doc) {
+    if (!doc || !doc.getElementById) return;
+    const view = doc.defaultView || (typeof window !== "undefined" ? window : null);
+    const store = createStore(view && view.localStorage);
+    const now = new Date();
+    const today = dateKey(now);
+    let challenges = {};
+
+    const dateEl = doc.getElementById("today-date");
+    const titleEl = doc.getElementById("challenge-title");
+    const instructionEl = doc.getElementById("challenge-instruction");
+    const sourceEl = doc.getElementById("challenge-source");
+    const tagEl = doc.getElementById("placeholder-tag");
+    const article = doc.getElementById("challenge");
+    const doneBtn = doc.getElementById("done-btn");
+    const panel = doc.getElementById("streak-panel");
+    const countEl = doc.getElementById("streak-count");
+    const unitEl = doc.getElementById("streak-unit");
+    const dayList = doc.getElementById("day-row");
+    const tomorrowEl = doc.getElementById("tomorrow-line");
+    const emailSection = doc.getElementById("email-prompt");
+    const rows = Array.from(doc.querySelectorAll("[data-must-row]"));
+
+    if (dateEl) dateEl.textContent = formatLong(now);
+
+    function savedDates() {
+      return parseJson(store.get(KEYS.done), []);
+    }
+
+    function paintChallenge() {
+      const entry = challengeFor(challenges, today);
+      if (titleEl) titleEl.textContent = entry.title;
+      if (instructionEl) instructionEl.textContent = entry.instruction;
+      if (sourceEl) {
+        sourceEl.textContent = entry.source;
+        sourceEl.hidden = !entry.source;
+      }
+      if (tagEl) tagEl.hidden = entry.placeholder !== true;
+      if (article) {
+        article.dataset.placeholder = entry.placeholder ? "true" : "false";
+        article.dataset.fallback = entry.fallback ? "true" : "false";
+        article.hidden = false;
+      }
+    }
+
+    function paintDone() {
+      const state = completionState(savedDates(), today);
+      if (doneBtn) {
+        const complete = state.todayDone;
+        doneBtn.dataset.state = complete ? "done" : "ready";
+        doneBtn.setAttribute("aria-pressed", complete ? "true" : "false");
+        doneBtn.disabled = complete;
+        doneBtn.classList.toggle("is-complete", complete);
+        doneBtn.textContent = complete ? "Done today" : "Done";
+      }
+      if (panel) panel.hidden = !state.todayDone;
+      if (countEl) {
+        countEl.textContent = String(state.streak);
+        countEl.dataset.streak = String(state.streak);
+      }
+      if (unitEl) unitEl.textContent = state.streak === 1 ? "day" : "days";
+      if (dayList) {
+        dayList.replaceChildren();
+        state.days.forEach(function (day) {
+          const item = doc.createElement("li");
+          item.className = "day-box";
+          if (day.lit) item.classList.add("is-lit");
+          if (day.today) item.classList.add("is-today");
+          if (day.older) item.classList.add("is-older");
+          item.dataset.date = day.date;
+          item.dataset.lit = day.lit ? "true" : "false";
+          item.setAttribute(
+            "aria-label",
+            formatDayLabel(day.date) + ", " + (day.lit ? "done" : "open")
+          );
+          const num = doc.createElement("span");
+          num.setAttribute("aria-hidden", "true");
+          num.textContent = String(Number(day.date.slice(8, 10)));
+          item.append(num);
+          dayList.append(item);
+        });
+      }
+      if (tomorrowEl) tomorrowEl.textContent = tomorrowLine(challenges, today);
+      paintEmail(state.total);
+      return state;
+    }
+
+    function paintEmail(total) {
+      if (!emailSection || emailSection.dataset.submitted === "true") return;
+      const show = shouldOfferEmail(total, store.get(KEYS.email) === "1");
+      const wasHidden = emailSection.hidden;
+      emailSection.hidden = !show;
+      if (show && wasHidden) {
+        const consent = doc.getElementById("daily-consent");
+        if (consent) consent.checked = false;
+      }
+    }
+
+    function paintTodos() {
+      const items = loadTodos(parseJson(store.get(KEYS.todos), null), today);
+      rows.forEach(function (row, index) {
+        const item = items[index];
+        const box = row.querySelector('input[type="checkbox"]');
+        const text = row.querySelector('input[type="text"]');
+        if (!box || !text || !item) return;
+        box.checked = item.done;
+        text.value = item.text;
+        text.classList.toggle("is-done", item.done);
+      });
+    }
+
+    function saveTodos() {
+      const items = rows.map(function (row) {
+        const box = row.querySelector('input[type="checkbox"]');
+        const text = row.querySelector('input[type="text"]');
+        return {
+          text: text ? text.value.slice(0, 140) : "",
+          done: !!(box && box.checked),
+        };
+      });
+      store.set(KEYS.todos, JSON.stringify({ date: today, items: items }));
+      rows.forEach(function (row) {
+        const box = row.querySelector('input[type="checkbox"]');
+        const text = row.querySelector('input[type="text"]');
+        if (text && box) text.classList.toggle("is-done", box.checked);
+      });
+    }
+
+    paintDone();
+    paintTodos();
+    if (!(view && view.fetch)) paintChallenge();
+
+    if (doneBtn) {
+      doneBtn.addEventListener("click", function () {
+        if (doneBtn.disabled) return;
+        const dates = withDone(savedDates(), today);
+        store.set(KEYS.done, JSON.stringify(dates));
+        paintDone();
+      });
+    }
+
+    rows.forEach(function (row) {
+      row.addEventListener("input", saveTodos);
+      row.addEventListener("change", saveTodos);
+    });
+
+    const form = doc.getElementById("daily-form");
+    if (form) {
+      const consentField = form.querySelector("[data-consent]");
+      const emailField = form.querySelector("[data-email]");
+      const consent = doc.getElementById("daily-consent");
+      const email = doc.getElementById("daily-email");
+      const submitBtn = doc.getElementById("daily-submit");
+      const emailError = emailField ? emailField.querySelector(".field-error") : null;
+
+      const clearInvalid = function (field) {
+        if (field) field.classList.remove("is-invalid");
+      };
+
+      if (consent) {
+        consent.addEventListener("invalid", function (event) {
+          event.preventDefault();
+          if (consentField) consentField.classList.add("is-invalid");
+          consent.focus();
+        });
+      }
+      if (email) {
+        email.addEventListener("invalid", function (event) {
+          event.preventDefault();
+          if (emailField) emailField.classList.add("is-invalid");
+          if (!consent || consent.checked) email.focus();
+        });
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        clearInvalid(consentField);
+        clearInvalid(emailField);
+        if (emailError) emailError.textContent = "Enter a valid email.";
+        if (!consent || !consent.checked) {
+          if (consentField) consentField.classList.add("is-invalid");
+          if (consent) consent.focus();
+          return;
+        }
+        if (!email || !email.value.trim() || !email.checkValidity()) {
+          if (emailField) emailField.classList.add("is-invalid");
+          if (email) email.focus();
+          return;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Sending…";
+        }
+        const body = new URLSearchParams(new FormData(form)).toString();
+        fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body,
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("status");
+            store.set(KEYS.email, "1");
+            if (emailSection) emailSection.dataset.submitted = "true";
+            form.hidden = true;
+            const success = doc.getElementById("email-success");
+            if (success) success.hidden = false;
+          })
+          .catch(function () {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send";
+            }
+            if (emailError) emailError.textContent = "Could not send just now.";
+            if (emailField) emailField.classList.add("is-invalid");
+          });
+      });
+
+      form.querySelectorAll("input").forEach(function (input) {
+        input.addEventListener("input", function () {
+          const field = input.closest("[data-consent], [data-email]");
+          clearInvalid(field);
+        });
+        input.addEventListener("change", function () {
+          const field = input.closest("[data-consent], [data-email]");
+          clearInvalid(field);
+        });
+      });
+    }
+
+    if (view && view.fetch) {
+      view
+        .fetch("/data/challenges.json", { headers: { Accept: "application/json" } })
+        .then(function (res) {
+          if (!res.ok) throw new Error("status");
+          return res.json();
+        })
+        .then(function (data) {
+          challenges = data && typeof data === "object" ? data : {};
+          paintChallenge();
+          paintDone();
+        })
+        .catch(function () {
+          challenges = {};
+          paintChallenge();
+          paintDone();
+        });
+    }
+
+    bindChrome(doc);
+  }
+
+  function bindChrome(doc) {
+    const view = doc.defaultView;
+    if (!view) return;
+    const nav = doc.getElementById("nav");
+    if (nav) {
+      const onScroll = function () {
+        nav.classList.toggle("is-scrolled", view.scrollY > 24);
+      };
+      onScroll();
+      view.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    const menuToggle = doc.querySelector(".nav-toggle");
+    const mobileNav = doc.getElementById("mobile-nav");
+    const menuClose = mobileNav ? mobileNav.querySelector(".mobile-nav-close") : null;
+    const shell = doc.querySelector(".shell");
+    if (!menuToggle || !mobileNav) return;
+
+    const setBackgroundInert = function (on) {
+      if (!shell) return;
+      shell.querySelectorAll(":scope > header, :scope > main, :scope > footer").forEach(function (el) {
+        el.inert = on;
+      });
+    };
+
+    const lockScroll = function () {
+      const y = view.scrollY || doc.documentElement.scrollTop || 0;
+      doc.body.dataset.scrollY = String(y);
+      doc.body.style.top = "-" + y + "px";
+      doc.body.classList.add("menu-open");
+    };
+
+    const unlockScroll = function () {
+      const y = parseInt(doc.body.dataset.scrollY || "0", 10);
+      doc.body.classList.remove("menu-open");
+      doc.body.style.top = "";
+      delete doc.body.dataset.scrollY;
+      const root = doc.documentElement;
+      const previous = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      view.scrollTo(0, y);
+      root.style.scrollBehavior = previous;
+      return y;
+    };
+
+    const openMenu = function () {
+      mobileNav.hidden = false;
+      menuToggle.setAttribute("aria-expanded", "true");
+      lockScroll();
+      setBackgroundInert(true);
+      if (menuClose) menuClose.focus({ preventScroll: true });
+    };
+
+    const closeMenu = function (opts) {
+      const options = opts || {};
+      if (mobileNav.hidden) return;
+      unlockScroll();
+      mobileNav.hidden = true;
+      menuToggle.setAttribute("aria-expanded", "false");
+      setBackgroundInert(false);
+      if (options.restoreFocus !== false) menuToggle.focus({ preventScroll: true });
+    };
+
+    menuToggle.addEventListener("click", function () {
+      if (menuToggle.getAttribute("aria-expanded") === "true") closeMenu();
+      else openMenu();
+    });
+    if (menuClose) menuClose.addEventListener("click", function () { closeMenu(); });
+
+    mobileNav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        const href = link.getAttribute("href");
+        if (!href || !href.startsWith("#") || mobileNav.hidden) return;
+        event.preventDefault();
+        unlockScroll();
+        mobileNav.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        setBackgroundInert(false);
+        const target = doc.querySelector(href);
+        if (target) {
+          const reduce = view.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        }
+        view.history.pushState(null, "", href);
+      });
+    });
+
+    mobileNav.addEventListener("keydown", function (event) {
+      if (event.key !== "Tab" || mobileNav.hidden) return;
+      const focusable = Array.from(mobileNav.querySelectorAll("button, a"));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && doc.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && doc.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    doc.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeMenu();
+    });
+  }
+
+  return {
+    ZONE: ZONE,
+    EMAIL_AFTER: EMAIL_AFTER,
+    KEYS: KEYS,
+    FALLBACK: FALLBACK,
+    dateKey: dateKey,
+    formatLong: formatLong,
+    addDays: addDays,
+    isRealDate: isRealDate,
+    normalizeDates: normalizeDates,
+    withDone: withDone,
+    completionState: completionState,
+    lookupChallenge: lookupChallenge,
+    challengeFor: challengeFor,
+    tomorrowLine: tomorrowLine,
+    loadTodos: loadTodos,
+    shouldOfferEmail: shouldOfferEmail,
+    mount: mount,
+  };
+});
