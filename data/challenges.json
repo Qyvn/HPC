@@ -1,0 +1,275 @@
+{
+  "launchDate": "2026-10-06",
+  "challenges": [
+    {
+      "day": 1,
+      "theme": "Own the mirror",
+      "title": "Name the blocker",
+      "challenge": "On a sticky note, write one goal and the one habit that's blocking it. Be specific. Put it on your bathroom mirror.",
+      "why": "Change starts with an honest look at where you are, kept where you can't avoid it.",
+      "tomorrow_teaser": "Tomorrow: one move against that habit before you open your phone.",
+      "time": 5
+    },
+    {
+      "day": 2,
+      "theme": "Own the mirror",
+      "title": "Before the phone",
+      "challenge": "Read your mirror note out loud this morning. Take one small action against that habit before you open your phone.",
+      "why": "A goal you face every morning is harder to dodge than one you keep in your head.",
+      "tomorrow_teaser": "Tomorrow: three honest notes on the mirror. Facts, not insults.",
+      "time": 5
+    },
+    {
+      "day": 3,
+      "theme": "Own the mirror",
+      "title": "Three honest notes",
+      "challenge": "Add three notes to your mirror: one thing you keep avoiding, one excuse you lean on, and one task you'll finish this week. Keep them factual.",
+      "why": "Plain truth, said without insults, is something you can act on.",
+      "tomorrow_teaser": "Tomorrow: find the weakest part of one skill and work on just that.",
+      "time": 10
+    },
+    {
+      "day": 4,
+      "theme": "Own the mirror",
+      "title": "Find the weak spot",
+      "challenge": "Pick one skill your goal depends on. Name the exact part where you're weakest, then spend 10 minutes working only on that part.",
+      "why": "Improvement starts with a precise diagnosis, not a general wish to be better.",
+      "tomorrow_teaser": "Tomorrow: list five hard things you've already come through.",
+      "time": 10
+    },
+    {
+      "day": 5,
+      "theme": "Own the mirror",
+      "title": "Fill the jar",
+      "challenge": "Write down five hard things you've already come through, big or small. Save the list somewhere you can open it in seconds.",
+      "why": "Proof of what you've handled before is the best answer to doubt today.",
+      "tomorrow_teaser": "Tomorrow: log your whole day in 30-minute blocks. No changes yet.",
+      "time": 10
+    },
+    {
+      "day": 6,
+      "theme": "Own the mirror",
+      "title": "Log the day",
+      "challenge": "Today, note what you actually do in 30-minute blocks from waking to bed. Don't fix anything yet. Just record it honestly.",
+      "why": "You can't take back time you haven't measured.",
+      "tomorrow_teaser": "Tomorrow: take back one wasted half hour and give it to your goal.",
+      "time": 10
+    },
+    {
+      "day": 7,
+      "theme": "Own the mirror",
+      "title": "Take back time",
+      "challenge": "From yesterday's log, pick one 30-minute block that didn't serve you. Use 15 minutes of it today for your mirror goal.",
+      "why": "Most people don't lack time. They lack a plan for it. Raise the standard.",
+      "tomorrow_teaser": "Tomorrow: do the task you've put off longest, before anything else.",
+      "time": 15
+    },
+    {
+      "day": 8,
+      "theme": "Callous the mind",
+      "title": "Hard thing first",
+      "challenge": "Pick the small task you've been putting off longest. Do it first today, before anything easier gets your attention.",
+      "why": "Small, regular doses of discomfort build a mind that doesn't flinch.",
+      "tomorrow_teaser": "Tomorrow: when you want to stop, go a little further first.",
+      "time": 10
+    },
+    {
+      "day": 9,
+      "theme": "Callous the mind",
+      "title": "A little further",
+      "challenge": "In a workout or focused task today, when you first want to stop, add a little more: a few good-form reps or five more minutes. Stop at any sharp pain.",
+      "why": "The first urge to quit is a signal, not your limit.",
+      "tomorrow_teaser": "Tomorrow: win the one second where quitting happens.",
+      "time": 10
+    },
+    {
+      "day": 10,
+      "theme": "Callous the mind",
+      "title": "Win the second",
+      "challenge": "The next time you feel the pull to skip or give up today, pause. Take three slow breaths, picture what happens if you fold, then choose.",
+      "why": "Most quitting happens in one moment. Be ready for that moment.",
+      "tomorrow_teaser": "Tomorrow: one line on why your hardest task matters.",
+      "time": 5
+    },
+    {
+      "day": 11,
+      "theme": "Callous the mind",
+      "title": "Write the why",
+      "challenge": "Before your hardest task today, write one sentence on why it matters to you. Read it again when the task gets uncomfortable.",
+      "why": "A reason decided in advance holds up better than one you look for under pressure.",
+      "tomorrow_teaser": "Tomorrow: two everyday tasks with your other hand.",
+      "time": 5
+    },
+    {
+      "day": 12,
+      "theme": "Callous the mind",
+      "title": "Other hand day",
+      "challenge": "Do two everyday tasks with your non-dominant hand, like brushing your teeth or stirring your coffee. When it feels clumsy, keep going.",
+      "why": "Choosing to be awkward on purpose is how a weak side gets stronger.",
+      "tomorrow_teaser": "Tomorrow: rehearse your hardest moment before it arrives.",
+      "time": 5
+    },
+    {
+      "day": 13,
+      "theme": "Callous the mind",
+      "title": "Rehearse the obstacle",
+      "challenge": "Spend five minutes picturing tomorrow's hardest moment. See where it could go wrong, and decide now what you'll do if it does.",
+      "why": "When you've already met the obstacle in your head, it can't catch you off guard.",
+      "tomorrow_teaser": "Tomorrow: do one small thing you've been avoiding out of fear.",
+      "time": 5
+    },
+    {
+      "day": 14,
+      "theme": "Callous the mind",
+      "title": "Walk toward it",
+      "challenge": "Pick one small thing you've avoided out of fear: a call, a question, a hard conversation. Do it today, even if it feels awkward.",
+      "why": "Fear shrinks when you move toward it and grows when you hide. Raise the standard.",
+      "tomorrow_teaser": "Tomorrow: plan an earlier start and protect the extra half hour.",
+      "time": 10
+    },
+    {
+      "day": 15,
+      "theme": "Work in the dark",
+      "title": "Start earlier",
+      "challenge": "Tonight, set your alarm 30 minutes earlier and go to bed 30 minutes earlier too. Decide now what you'll do with that first half hour.",
+      "why": "An earlier start buys time before the day's demands find you.",
+      "tomorrow_teaser": "Tomorrow: watch someone excellent and ask why it works.",
+      "time": 5
+    },
+    {
+      "day": 16,
+      "theme": "Work in the dark",
+      "title": "Study the tape",
+      "challenge": "Watch 10 minutes of someone excellent in your field: a talk, a match, a demo. Pause often, ask why each move works, and note one to try.",
+      "why": "Watch to learn how it works, not just to enjoy it.",
+      "tomorrow_teaser": "Tomorrow: replay one of your own moments and find two better options.",
+      "time": 10
+    },
+    {
+      "day": 17,
+      "theme": "Work in the dark",
+      "title": "Replay your moment",
+      "challenge": "Pick one moment this week that didn't go well. Write down two other ways you could have handled it, and circle the one you'll use next time.",
+      "why": "Looking at what could have happened sharpens what you'll do next.",
+      "tomorrow_teaser": "Tomorrow: ask one real question of someone further ahead.",
+      "time": 10
+    },
+    {
+      "day": 18,
+      "theme": "Work in the dark",
+      "title": "Ask further ahead",
+      "challenge": "Send one specific question to someone further ahead than you in your field. Make it a real question you want answered, not small talk.",
+      "why": "Asking feels awkward for a minute. Not asking can cost you months.",
+      "tomorrow_teaser": "Tomorrow: read the actual rules of something you compete in.",
+      "time": 10
+    },
+    {
+      "day": 19,
+      "theme": "Work in the dark",
+      "title": "Read the rules",
+      "challenge": "Read the actual rules of something you compete in: a policy at work, a contract, the rules of your sport. Note one detail most people miss.",
+      "why": "Knowing the rules better than others is preparation few people bother with.",
+      "tomorrow_teaser": "Tomorrow: 15 minutes of work no one will ever see.",
+      "time": 15
+    },
+    {
+      "day": 20,
+      "theme": "Work in the dark",
+      "title": "Unseen work",
+      "challenge": "Do 15 minutes of work on your goal that no one will see or praise. Don't post it and don't mention it.",
+      "why": "The results people notice rest on work they never see.",
+      "tomorrow_teaser": "Tomorrow: arrive early and sit in five minutes of quiet.",
+      "time": 15
+    },
+    {
+      "day": 21,
+      "theme": "Work in the dark",
+      "title": "Arrive early, settle",
+      "challenge": "Get to your most important meeting, session or task five minutes early. Sit quietly without your phone and settle before it starts.",
+      "why": "Calm you build before the noise is calm you can carry into it.",
+      "tomorrow_teaser": "Tomorrow: 10 slow, correct minutes on your most basic skill.",
+      "time": 5
+    },
+    {
+      "day": 22,
+      "theme": "Detail and finishing",
+      "title": "Basics, done right",
+      "challenge": "Spend 10 minutes on the most basic skill in your work or sport. Do it slowly and correctly, with no shortcuts and nothing fancy.",
+      "why": "Solid basics put you ahead of the many people who skip them.",
+      "tomorrow_teaser": "Tomorrow: do one dull job to a standard you'd be proud of.",
+      "time": 10
+    },
+    {
+      "day": 23,
+      "theme": "Detail and finishing",
+      "title": "Pride in small jobs",
+      "challenge": "Pick one dull task today, like the dishes, an email or a report. Do it to your best standard, as if someone you respect will check it.",
+      "why": "Standards are built in the jobs nobody notices.",
+      "tomorrow_teaser": "Tomorrow: an honest after-action report on one recent miss.",
+      "time": 15
+    },
+    {
+      "day": 24,
+      "theme": "Detail and finishing",
+      "title": "After-action report",
+      "challenge": "Pick one recent failure. Write what went well, what went wrong and one fix. Put the fix in your calendar.",
+      "why": "A miss you study honestly becomes a plan for next time.",
+      "tomorrow_teaser": "Tomorrow: do your work at the usual time, whatever yesterday brought.",
+      "time": 15
+    },
+    {
+      "day": 25,
+      "theme": "Detail and finishing",
+      "title": "Same time, any result",
+      "challenge": "Whatever happened yesterday, good or bad, work on your goal at your usual time today. Don't let the result move the routine.",
+      "why": "A routine that doesn't depend on results is one you can trust.",
+      "tomorrow_teaser": "Tomorrow: set a goal you fully control, not an outcome.",
+      "time": 10
+    },
+    {
+      "day": 26,
+      "theme": "Detail and finishing",
+      "title": "Control the process",
+      "challenge": "Write one goal for today that's an action you fully control, not a result. Say \"make five calls\", not \"close a deal\". Then do it.",
+      "why": "Results follow the process, so put your attention where your control is.",
+      "tomorrow_teaser": "Tomorrow: write your own one-line code and put it on the mirror.",
+      "time": 5
+    },
+    {
+      "day": 27,
+      "theme": "Detail and finishing",
+      "title": "Write your code",
+      "challenge": "Write a one- or two-line personal code: what you stand for and the standard you hold yourself to. Put it on the mirror beside your goal.",
+      "why": "Your own principles keep you steady when nobody else is giving direction.",
+      "tomorrow_teaser": "Tomorrow: look at who's in your corner and tell one of them your goal.",
+      "time": 10
+    },
+    {
+      "day": 28,
+      "theme": "Detail and finishing",
+      "title": "Check your corner",
+      "challenge": "Think of the three people you spend the most time with. Pick the one who pushes you forward and tell them what you're working on.",
+      "why": "The people closest to you either help carry your goals or make them heavier.",
+      "tomorrow_teaser": "Tomorrow: help one person who's a step behind you.",
+      "time": 10
+    },
+    {
+      "day": 29,
+      "theme": "Detail and finishing",
+      "title": "Bring someone along",
+      "challenge": "Help one person who's a step behind you today: share a tip, review their work, or walk them through something you know well.",
+      "why": "Getting ahead counts for more when you bring others with you.",
+      "tomorrow_teaser": "Tomorrow: mark one win, then set the next goal and start again.",
+      "time": 15
+    },
+    {
+      "day": 30,
+      "theme": "Detail and finishing",
+      "title": "Start again at zero",
+      "challenge": "Look back over your 30 days and write down one win. Then set your next goal on the mirror and treat tomorrow as day one.",
+      "why": "Mark the win, then reset. The next level starts from zero. Raise the standard.",
+      "tomorrow_teaser": "Tomorrow: a new block starts. Same mirror, higher standard.",
+      "time": 10
+    }
+  ]
+}

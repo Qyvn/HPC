@@ -12,3 +12,8 @@
   from = "/privacy"
   to = "/privacy.html"
   status = 200
+
+[[redirects]]
+  from = "/today"
+  to = "/today.html"
+  status = 200

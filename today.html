@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Today’s challenge from High Performers Club. Mark the day done, keep a streak, and name three must-dos." />
+  <meta name="author" content="High Performers Club" />
+  <link rel="canonical" href="https://highperformersclub.co.za/today" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="High Performers Club" />
+  <meta property="og:title" content="Today — High Performers Club" />
+  <meta property="og:description" content="One challenge. Mark it done. Name the three things that matter." />
+  <meta property="og:url" content="https://highperformersclub.co.za/today" />
+  <meta property="og:image" content="https://highperformersclub.co.za/public/assets/og.jpg" />
+
+  <title>Today — High Performers Club</title>
+  <link rel="icon" type="image/png" href="public/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="public/assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Michroma&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-deep: #000000;
+      --line: rgba(192, 198, 208, 0.12);
+      --line-strong: rgba(192, 198, 208, 0.32);
+      --silver: #c8ced8;
+      --silver-bright: #e8ecf2;
+      --silver-dim: #8a919c;
+      --ink: #f2f4f7;
+      --muted: #9aa1ab;
+      --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+      --body: "Inter", "Segoe UI", sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --nav-h: 72px;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--body);
+      color: var(--ink);
+      background: var(--bg-deep);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    a:visited { color: inherit; }
+    button, input, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; border: 0; background: none; }
+    :focus-visible {
+      outline: 1px solid var(--silver);
+      outline-offset: 3px;
+    }
+    [hidden] { display: none !important; }
+
+    .noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .shell { position: relative; z-index: 1; }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: var(--nav-h);
+      padding: 12px clamp(20px, 4vw, 48px);
+      background: linear-gradient(to bottom, rgba(0,0,0,.92), rgba(0,0,0,0));
+      transition: background 0.45s var(--ease), backdrop-filter 0.45s var(--ease), border-color 0.45s var(--ease);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      background: rgba(5,5,5,.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: var(--line);
+    }
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      color: var(--silver-bright);
+    }
+    .nav-brand img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.55));
+    }
+    .nav-brand span {
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 520px) {
+      .nav-brand span { display: none; }
+    }
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-link {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      min-height: 44px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      transition: color 0.3s var(--ease);
+    }
+    .nav-link:hover,
+    .nav-link[aria-current="page"] { color: var(--silver-bright); }
+    .nav-apply {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      min-height: 44px;
+      padding: 0 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      color: #080808;
+      border: 1px solid #dce2ea;
+      transition: background 0.35s var(--ease), transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+    .nav-apply:hover {
+      background: linear-gradient(180deg, #ffffff 0%, #cfd6e0 100%);
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+    .nav-tools {
+      display: none;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-toggle {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0;
+      color: var(--silver);
+    }
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+    }
+    @media (min-width: 860px) {
+      .nav-links { display: flex; }
+      .nav-tools { display: none; }
+    }
+    @media (max-width: 859px) {
+      .nav-links { display: none !important; }
+      .nav-tools { display: flex; }
+    }
+
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 12px) clamp(28px, 8vw, 72px) 48px;
+      background: #050505;
+      overscroll-behavior: none;
+    }
+    .mobile-nav-close {
+      position: absolute;
+      top: 14px;
+      right: clamp(12px, 4vw, 40px);
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-family: var(--body);
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--silver);
+    }
+    .mobile-nav nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: clamp(8px, 2.4vh, 22px);
+    }
+    .mobile-nav a {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(1.45rem, 6vw, 2.15rem);
+      letter-spacing: 0.14em;
+      line-height: 1.25;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+    }
+    .mobile-nav a:hover,
+    .mobile-nav a[aria-current="page"] { color: #fff; }
+    body.menu-open {
+      position: fixed;
+      left: 0;
+      right: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .today {
+      padding: calc(var(--nav-h) + 28px) 20px calc(64px + env(safe-area-inset-bottom));
+    }
+    @media (min-width: 720px) {
+      .today {
+        padding-top: calc(var(--nav-h) + 56px);
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+    }
+    .today-inner {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .kicker {
+      margin: 0 0 22px;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .challenge-kicker {
+      margin: 0 0 16px;
+    }
+    #challenge h1 {
+      margin: 0 0 18px;
+      font-family: var(--display);
+      font-size: clamp(1.4rem, 3.1vw, 2.1rem);
+      font-weight: 400;
+      letter-spacing: 0.11em;
+      line-height: 1.3;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      max-width: 100%;
+      hyphens: none;
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+    .instruction {
+      margin: 0;
+      max-width: 38ch;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+    .why {
+      margin: 16px 0 0;
+      max-width: 42ch;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: var(--silver-dim);
+    }
+
+    .done-block,
+    .day-ahead {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+    .done-btn {
+      width: 100%;
+      min-height: 84px;
+      padding: 18px 20px;
+      font-family: var(--display);
+      font-size: 14px;
+      letter-spacing: 0.46em;
+      text-indent: 0.46em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      color: #080808;
+      border: 1px solid #dce2ea;
+      touch-action: manipulation;
+      transition: background 0.35s var(--ease), box-shadow 0.35s var(--ease), transform 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s var(--ease);
+    }
+    .done-btn:hover:not(:disabled) {
+      background: linear-gradient(180deg, #ffffff 0%, #cfd6e0 100%);
+      box-shadow: 0 10px 28px rgba(0,0,0,.4);
+      transform: translateY(-1px);
+    }
+    .done-btn:active:not(:disabled) { transform: translateY(1px); }
+    .done-btn:disabled { cursor: default; opacity: 1; }
+    .done-btn.is-complete {
+      background: transparent;
+      color: var(--silver-bright);
+      border: 1px solid var(--line-strong);
+      box-shadow: none;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+    }
+    .done-btn.is-complete:hover { transform: none; }
+    .done-btn.is-waiting {
+      background: transparent;
+      color: var(--silver-dim);
+      border: 1px solid var(--line-strong);
+      box-shadow: none;
+      cursor: default;
+    }
+    .done-btn.is-waiting:hover { transform: none; }
+
+    .streak {
+      margin: 26px 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .streak-count {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(2.6rem, 10vw, 3.4rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--silver-bright);
+    }
+    .streak-unit {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .days {
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .day-box {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1;
+      max-height: 48px;
+      border: 1px solid var(--line-strong);
+      color: var(--silver-dim);
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      background: transparent;
+    }
+    .day-box.is-today { border-color: var(--silver); }
+    .day-box.is-lit {
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      border-color: #dce2ea;
+      color: #080808;
+    }
+    @media (max-width: 719px) {
+      .day-box.is-older { display: none; }
+    }
+    @media (min-width: 720px) {
+      .days {
+        grid-template-columns: repeat(14, minmax(0, 1fr));
+        gap: 6px;
+      }
+    }
+    .tomorrow {
+      margin: 18px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+      overflow-wrap: break-word;
+    }
+    .device-note {
+      margin: 16px 0 0;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--silver-dim);
+    }
+
+    .block-title {
+      margin: 0 0 18px;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      line-height: 1.5;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      max-width: 18ch;
+      hyphens: none;
+    }
+    .must-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+    .must-row {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      align-items: center;
+      min-height: 56px;
+      border-bottom: 1px solid var(--line);
+    }
+    .must-row:focus-within { border-bottom-color: var(--silver); }
+    .must-row input[type="text"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.4;
+      outline: none;
+      touch-action: manipulation;
+    }
+    .must-row input[type="text"]::placeholder { color: #5c636d; }
+    .must-row input[type="text"].is-done { color: var(--silver-dim); }
+
+    .check {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+    }
+    .check input {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .check-ui {
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(192, 198, 208, 0.55);
+      background: transparent;
+      pointer-events: none;
+    }
+    .check input:checked + .check-ui {
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      border-color: #dce2ea;
+    }
+    .check input:focus-visible + .check-ui {
+      outline: 1px solid var(--silver);
+      outline-offset: 3px;
+    }
+
+    .email-prompt {
+      margin-top: 28px;
+      border: 1px solid var(--line-strong);
+      padding: 22px 18px 18px;
+      background: linear-gradient(180deg, #101010 0%, #0a0a0a 100%);
+    }
+    .email-prompt h2 {
+      margin: 0 0 18px;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      line-height: 1.55;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      max-width: 22ch;
+    }
+    .field { display: grid; gap: 10px; margin-bottom: 16px; }
+    .field label,
+    .consent-copy {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .field input[type="email"] {
+      width: 100%;
+      background: #060606;
+      border: 1px solid var(--line-strong);
+      color: var(--ink);
+      padding: 14px 16px;
+      min-height: 50px;
+      border-radius: 0;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .field input[type="email"]::placeholder { color: #5c636d; }
+    .field input[type="email"]:hover { border-color: rgba(192, 198, 208, 0.42); }
+    .field input[type="email"]:focus {
+      border-color: var(--silver);
+      box-shadow: 0 0 0 1px rgba(200, 206, 216, 0.2);
+    }
+    .field.is-invalid input[type="email"] { border-color: #a87878; }
+    .field-error {
+      display: none;
+      font-size: 0.85rem;
+      letter-spacing: 0;
+      text-transform: none;
+      font-weight: 400;
+      color: #c9a0a0;
+    }
+    .field.is-invalid .field-error,
+    .consent.is-invalid .field-error { display: block; }
+    .consent.is-invalid .check-ui { border-color: #a87878; }
+    .consent .field-error { grid-column: 1 / -1; }
+    .consent {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 2px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .consent-copy {
+      padding-top: 14px;
+      font-size: 0.92rem;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1.5;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      height: 0;
+      overflow: hidden;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      min-height: 48px;
+      padding: 14px 26px;
+      margin-top: 8px;
+      touch-action: manipulation;
+      transition: transform 0.35s var(--ease), background 0.35s var(--ease), box-shadow 0.35s var(--ease), opacity 0.3s var(--ease);
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      transform: none;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      color: #080808;
+      border: 1px solid #dce2ea;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(180deg, #ffffff 0%, #cfd6e0 100%);
+      box-shadow: 0 10px 28px rgba(0,0,0,.4);
+    }
+    .form-foot {
+      margin: 12px 0 0;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--silver-dim);
+    }
+    .form-foot a,
+    .footer-meta a { color: var(--silver); }
+    .form-foot a:hover,
+    .footer-meta a:hover { color: var(--silver-bright); }
+    .form-foot a { text-decoration: underline; text-underline-offset: 2px; }
+    .email-success {
+      margin: 0;
+      color: var(--silver);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 36px clamp(20px, 5vw, 64px) calc(48px + env(safe-area-inset-bottom));
+      background: var(--bg-deep);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 28px;
+    }
+    @media (min-width: 720px) {
+      .footer-inner {
+        grid-template-columns: 1.2fr 1fr;
+        align-items: end;
+        gap: 40px;
+      }
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .footer-brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    .footer-brand strong {
+      display: block;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 6px;
+    }
+    .footer-brand span {
+      display: block;
+      color: var(--silver-dim);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .footer-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+      align-items: center;
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .footer-meta a { transition: color 0.3s var(--ease); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .nav, .nav-apply, .nav-link, .done-btn, .btn, .field input[type="email"] {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="nav" id="nav">
+      <a class="nav-brand" href="/" aria-label="High Performers Club home">
+        <img src="public/assets/hpc-mark.png" srcset="public/assets/hpc-mark.png 1x, public/assets/hpc-mark@2x.png 2x" width="36" height="36" alt="" />
+        <span>HPC</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="/#standard">Standard</a>
+        <a class="nav-link" href="/#club">Club</a>
+        <a class="nav-link" href="/#entry">Entry</a>
+        <a class="nav-link" href="/today" aria-current="page">Today</a>
+        <a class="nav-apply" href="/#apply">Apply</a>
+      </nav>
+      <div class="nav-tools">
+        <a class="nav-apply nav-apply-mobile" href="/#apply">Apply</a>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+      <button type="button" class="mobile-nav-close" aria-label="Close menu">&times;</button>
+      <nav aria-label="Mobile">
+        <a href="/#standard">Standard</a>
+        <a href="/#club">Club</a>
+        <a href="/#entry">Entry</a>
+        <a href="/today" aria-current="page">Today</a>
+        <a href="/#apply">Apply</a>
+      </nav>
+    </div>
+
+    <main class="today" id="top">
+      <div class="today-inner">
+        <p class="kicker" id="today-date"></p>
+
+        <article id="challenge" hidden>
+          <p class="kicker challenge-kicker" id="challenge-kicker" hidden></p>
+          <h1 id="challenge-title"></h1>
+          <p class="instruction" id="challenge-body"></p>
+          <p class="why" id="challenge-why" hidden></p>
+        </article>
+
+        <section class="done-block" aria-labelledby="done-heading">
+          <h2 class="sr-only" id="done-heading">Mark today done</h2>
+          <button type="button" class="done-btn" id="done-btn" data-state="ready" aria-pressed="false">Done</button>
+          <div id="streak-panel" hidden>
+            <p class="streak">
+              <span class="streak-count" id="streak-count" data-streak="0">0</span>
+              <span class="streak-unit" id="streak-unit">days</span>
+            </p>
+            <h3 class="sr-only">Recent days</h3>
+            <ol class="days" id="day-row"></ol>
+            <p class="tomorrow" id="tomorrow-line"></p>
+          </div>
+          <p class="device-note">Saved on this device.</p>
+        </section>
+
+        <section class="email-prompt" id="email-prompt" hidden>
+          <h2>Get tomorrow’s challenge by email</h2>
+          <form
+            class="email-form"
+            id="daily-form"
+            name="daily-challenge"
+            method="POST"
+            action="/today"
+            netlify
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="daily-challenge" />
+            <p class="hp-field" aria-hidden="true">
+              <label>Don’t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="field" data-email>
+              <label for="daily-email">Email</label>
+              <input id="daily-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" required />
+              <span class="field-error" role="alert">Enter a valid email.</span>
+            </div>
+            <div class="consent" data-consent>
+              <label class="check">
+                <input id="daily-consent" name="consent" type="checkbox" value="yes" required />
+                <span class="check-ui" aria-hidden="true"></span>
+              </label>
+              <label class="consent-copy" for="daily-consent">Email me the daily challenge. I can unsubscribe any time.</label>
+              <span class="field-error" role="alert">Tick consent to receive the email.</span>
+            </div>
+            <button class="btn btn-primary" type="submit" id="daily-submit">Send</button>
+            <p class="form-foot"><a href="/privacy">Privacy</a></p>
+          </form>
+          <p class="email-success" id="email-success" role="status" hidden>Received. Tomorrow’s challenge will come by email.</p>
+        </section>
+
+        <section class="day-ahead" aria-labelledby="must-heading">
+          <h2 class="block-title" id="must-heading">Your three must&#8209;dos today</h2>
+          <ol class="must-list">
+            <li class="must-row" data-must-row>
+              <label class="check">
+                <input type="checkbox" aria-label="Mark must-do 1 done" />
+                <span class="check-ui" aria-hidden="true"></span>
+              </label>
+              <input type="text" maxlength="140" placeholder="Add a must-do" aria-label="Must-do 1" enterkeyhint="done" autocomplete="off" />
+            </li>
+            <li class="must-row" data-must-row>
+              <label class="check">
+                <input type="checkbox" aria-label="Mark must-do 2 done" />
+                <span class="check-ui" aria-hidden="true"></span>
+              </label>
+              <input type="text" maxlength="140" placeholder="Add a must-do" aria-label="Must-do 2" enterkeyhint="done" autocomplete="off" />
+            </li>
+            <li class="must-row" data-must-row>
+              <label class="check">
+                <input type="checkbox" aria-label="Mark must-do 3 done" />
+                <span class="check-ui" aria-hidden="true"></span>
+              </label>
+              <input type="text" maxlength="140" placeholder="Add a must-do" aria-label="Must-do 3" enterkeyhint="done" autocomplete="off" />
+            </li>
+          </ol>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="public/assets/hpc-mark.png" width="40" height="40" alt="" />
+          <div>
+            <strong>High Performers Club</strong>
+            <span>For those who raise the standard.</span>
+          </div>
+        </div>
+        <div class="footer-meta">
+          <a href="mailto:apply@highperformersclub.co.za">Email</a>
+          <a href="/privacy.html">Privacy</a>
+          <a href="/#apply">Apply</a>
+          <a href="https://youtube.com/@highperformersclubpodcast" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://instagram.com/highperformersclubhpc" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@highperformersclb" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+          <a href="https://x.com/TheHPCClub" target="_blank" rel="noopener">X</a>
+          <a href="https://www.facebook.com/profile.php?id=61595048336479" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="/today.js"></script>
+</body>
+</html>
