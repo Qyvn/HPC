@@ -277,6 +277,9 @@
       text-transform: uppercase;
       color: var(--silver-dim);
     }
+    .challenge-kicker {
+      margin: 0 0 16px;
+    }
     #challenge h1 {
       margin: 0 0 18px;
       font-family: var(--display);
@@ -298,17 +301,13 @@
       line-height: 1.65;
       color: var(--muted);
     }
-    .source,
-    .placeholder-tag {
+    .why {
       margin: 16px 0 0;
-      font-family: var(--body);
-      font-weight: 500;
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      max-width: 42ch;
+      font-size: 0.92rem;
+      line-height: 1.55;
       color: var(--silver-dim);
     }
-    .placeholder-tag { margin-top: 8px; }
 
     .done-block,
     .day-ahead {
@@ -731,10 +730,10 @@
         <p class="kicker" id="today-date"></p>
 
         <article id="challenge" hidden>
+          <p class="kicker challenge-kicker" id="challenge-kicker" hidden></p>
           <h1 id="challenge-title"></h1>
-          <p class="instruction" id="challenge-instruction"></p>
-          <p class="source" id="challenge-source" hidden></p>
-          <p class="placeholder-tag" id="placeholder-tag" hidden>Placeholder copy</p>
+          <p class="instruction" id="challenge-body"></p>
+          <p class="why" id="challenge-why" hidden></p>
         </article>
 
         <section class="done-block" aria-labelledby="done-heading">

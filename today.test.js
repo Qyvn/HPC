@@ -110,23 +110,56 @@ test("email is offered only after the third total done, and not once opted in", 
   assert.equal(today.shouldOfferEmail(8, false), true);
 });
 
-test("challenges are keyed by date, with a calm fallback and a one-line tomorrow preview", () => {
-  const dates = Object.keys(challenges).filter((key) => /^\d{4}-\d{2}-\d{2}$/.test(key));
-  assert.equal(dates.length, 14);
-  for (const date of dates) {
-    const entry = challenges[date];
-    assert.equal(entry.placeholder, true);
-    assert.ok(entry.title && entry.instruction && entry.source);
-    assert.match(entry.source, /placeholder/i);
-    assert.equal(today.lookupChallenge(challenges, date).placeholder, true);
-  }
-  assert.equal(today.lookupChallenge(challenges, "2020-01-01"), null);
-  assert.equal(today.lookupChallenge({ _note: "ignore me" }, "2026-10-06"), null);
-  assert.equal(today.challengeFor(challenges, "2020-01-01").fallback, true);
-  assert.match(today.challengeFor(challenges, "2020-01-01").title, /open/i);
-  assert.equal(today.tomorrowLine(challenges, "2026-10-06"), "Tomorrow — First rep.");
+test("launch challenges are date-keyed, with kickers and a single tomorrow line", () => {
+  const raw = fs.readFileSync(path.join(__dirname, "data/challenges.json"), "utf8");
+  const html = fs.readFileSync(path.join(__dirname, "today.html"), "utf8");
+  assert.doesNotMatch(raw, /placeholder/i);
+  assert.doesNotMatch(raw, /"source"/);
+  assert.doesNotMatch(html, /Placeholder copy/);
+  assert.doesNotMatch(html, /id="challenge-source"/);
+
+  const dates = Object.keys(challenges).filter((key) => /^\d{4}-\d{2}-\d{2}$/.test(key)).sort();
+  assert.deepEqual(dates, [
+    "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10",
+    "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15",
+    "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19",
+  ]);
+
+  dates.forEach((date, index) => {
+    const entry = today.lookupChallenge(challenges, date);
+    assert.equal(entry.day, index + 1);
+    assert.equal(entry.fallback, false);
+    assert.equal(entry.placeholder, undefined);
+    assert.equal(entry.source, undefined);
+    assert.ok(entry.title && entry.challenge && entry.why && entry.theme);
+    assert.match(today.formatKicker(entry), new RegExp("^DAY " + (index + 1) + " · .+ · \\d+ MIN$"));
+    assert.doesNotMatch(JSON.stringify(entry), /placeholder/i);
+  });
+
+  const dayOne = today.lookupChallenge(challenges, "2026-10-06");
+  assert.equal(today.formatKicker(dayOne), "DAY 1 · OWN THE MIRROR · 5 MIN");
+  assert.equal(dayOne.title, "Name the blocker");
+  assert.match(dayOne.challenge, /bathroom mirror/);
+
+  const dayNine = today.lookupChallenge(challenges, "2026-10-14");
+  assert.equal(today.formatKicker(dayNine), "DAY 9 · CALLOUS THE MIND · 10 MIN");
+  assert.equal(dayNine.title, "A little further");
+
+  assert.equal(
+    today.tomorrowLine(challenges, "2026-10-06"),
+    "Tomorrow: one move against that habit before you open your phone."
+  );
+  assert.doesNotMatch(today.tomorrowLine(challenges, "2026-10-06"), /Tomorrow —/);
+  assert.equal(today.tomorrowLine(challenges, "2026-10-18"), "Tomorrow: do one small thing you've been avoiding out of fear.");
   assert.equal(today.tomorrowLine(challenges, "2026-10-19"), "Tomorrow isn’t set yet.");
-  assert.equal(today.lookupChallenge(challenges, "2026-10-08").title, "One clean page");
+
+  const shifted = { "2026-11-02": challenges["2026-10-06"] };
+  assert.equal(today.formatKicker(today.lookupChallenge(shifted, "2026-11-02")), "DAY 1 · OWN THE MIRROR · 5 MIN");
+  assert.equal(today.lookupChallenge(challenges, "2020-01-01"), null);
+  assert.equal(today.challengeFor(challenges, "2020-01-01").fallback, true);
+  assert.equal(today.challengeFor(challenges, "2020-01-01").title, "The day is open.");
+  assert.equal(today.formatKicker(today.challengeFor(challenges, "2020-01-01")), "");
+  assert.equal(today.tomorrowLine(challenges, "2020-01-01"), "Tomorrow isn’t set yet.");
 });
 
 test("the page form requires unticked consent, a honeypot, and a privacy link", () => {

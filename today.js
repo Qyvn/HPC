@@ -15,9 +15,12 @@
   };
   const FALLBACK = {
     title: "The day is open.",
-    instruction: "No challenge is set for this date. Keep the standard anyway.",
-    source: "",
-    placeholder: false,
+    challenge: "No challenge is set for this date. Keep the standard anyway.",
+    why: "",
+    tomorrow_teaser: "",
+    theme: "",
+    day: null,
+    time: null,
     fallback: true,
   };
 
@@ -129,19 +132,27 @@
     };
   }
 
+  function textField(entry, key) {
+    return entry && typeof entry[key] === "string" ? entry[key].trim() : "";
+  }
+
   function lookupChallenge(data, iso) {
     if (!data || typeof data !== "object" || !isRealDate(iso)) return null;
     const entry = data[iso];
     if (!entry || typeof entry !== "object") return null;
-    const title = typeof entry.title === "string" ? entry.title.trim() : "";
-    const instruction = typeof entry.instruction === "string" ? entry.instruction.trim() : "";
-    if (!title || !instruction) return null;
-    const source = typeof entry.source === "string" ? entry.source.trim() : "";
+    const title = textField(entry, "title");
+    const challenge = textField(entry, "challenge");
+    if (!title || !challenge) return null;
+    const day = Number(entry.day);
+    const time = Number(entry.time);
     return {
       title: title,
-      instruction: instruction,
-      source: source,
-      placeholder: entry.placeholder === true,
+      challenge: challenge,
+      why: textField(entry, "why"),
+      tomorrow_teaser: textField(entry, "tomorrow_teaser"),
+      theme: textField(entry, "theme"),
+      day: Number.isFinite(day) ? day : null,
+      time: Number.isFinite(time) ? time : null,
       fallback: false,
     };
   }
@@ -150,11 +161,17 @@
     return lookupChallenge(data, iso) || FALLBACK;
   }
 
+  function formatKicker(entry) {
+    if (!entry || entry.fallback || entry.day == null || !entry.theme || entry.time == null) return "";
+    return "DAY " + entry.day + " · " + entry.theme.toUpperCase() + " · " + entry.time + " MIN";
+  }
+
   function tomorrowLine(data, today) {
     const next = lookupChallenge(data, addDays(today, 1));
     if (!next) return "Tomorrow isn’t set yet.";
-    const title = next.title.replace(/[.!?]+$/, "");
-    return "Tomorrow — " + title + ".";
+    const current = lookupChallenge(data, today);
+    if (current && current.tomorrow_teaser) return current.tomorrow_teaser;
+    return "Tomorrow isn’t set yet.";
   }
 
   function loadTodos(stored, today) {
@@ -218,10 +235,10 @@
     let challenges = {};
 
     const dateEl = doc.getElementById("today-date");
+    const kickerEl = doc.getElementById("challenge-kicker");
     const titleEl = doc.getElementById("challenge-title");
-    const instructionEl = doc.getElementById("challenge-instruction");
-    const sourceEl = doc.getElementById("challenge-source");
-    const tagEl = doc.getElementById("placeholder-tag");
+    const bodyEl = doc.getElementById("challenge-body");
+    const whyEl = doc.getElementById("challenge-why");
     const article = doc.getElementById("challenge");
     const doneBtn = doc.getElementById("done-btn");
     const panel = doc.getElementById("streak-panel");
@@ -240,15 +257,18 @@
 
     function paintChallenge() {
       const entry = challengeFor(challenges, today);
-      if (titleEl) titleEl.textContent = entry.title;
-      if (instructionEl) instructionEl.textContent = entry.instruction;
-      if (sourceEl) {
-        sourceEl.textContent = entry.source;
-        sourceEl.hidden = !entry.source;
+      const kicker = formatKicker(entry);
+      if (kickerEl) {
+        kickerEl.textContent = kicker;
+        kickerEl.hidden = !kicker;
       }
-      if (tagEl) tagEl.hidden = entry.placeholder !== true;
+      if (titleEl) titleEl.textContent = entry.title;
+      if (bodyEl) bodyEl.textContent = entry.challenge;
+      if (whyEl) {
+        whyEl.textContent = entry.why || "";
+        whyEl.hidden = !entry.why;
+      }
       if (article) {
-        article.dataset.placeholder = entry.placeholder ? "true" : "false";
         article.dataset.fallback = entry.fallback ? "true" : "false";
         article.hidden = false;
       }
@@ -581,6 +601,7 @@
     completionState: completionState,
     lookupChallenge: lookupChallenge,
     challengeFor: challengeFor,
+    formatKicker: formatKicker,
     tomorrowLine: tomorrowLine,
     loadTodos: loadTodos,
     shouldOfferEmail: shouldOfferEmail,

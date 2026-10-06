@@ -1,87 +1,128 @@
 {
-  "_note": "One entry per day. The key is the date in Africa/Johannesburg, written YYYY-MM-DD. Each entry needs title, instruction (one or two lines), source (the theme or book), and placeholder. Leave placeholder true until the copy is final and in our own words. Keys that are not dates are ignored.",
   "2026-10-06": {
-    "title": "Name the standard",
-    "instruction": "Write the one standard you will not drop today, in a single sentence.",
-    "source": "Placeholder — The Standard",
-    "placeholder": true
+    "day": 1,
+    "theme": "Own the mirror",
+    "title": "Name the blocker",
+    "challenge": "On a sticky note, write one goal and the one habit that's blocking it. Be specific. Put it on your bathroom mirror.",
+    "why": "Change starts with an honest look at where you are, kept where you can't avoid it.",
+    "tomorrow_teaser": "Tomorrow: one move against that habit before you open your phone.",
+    "time": 5
   },
   "2026-10-07": {
-    "title": "First rep",
-    "instruction": "Do the hardest useful thing before you open anything else.",
-    "source": "Placeholder — Morning Work",
-    "placeholder": true
+    "day": 2,
+    "theme": "Own the mirror",
+    "title": "Before the phone",
+    "challenge": "Read your mirror note out loud this morning. Take one small action against that habit before you open your phone.",
+    "why": "A goal you face every morning is harder to dodge than one you keep in your head.",
+    "tomorrow_teaser": "Tomorrow: three honest notes on the mirror. Facts, not insults.",
+    "time": 5
   },
   "2026-10-08": {
-    "title": "One clean page",
-    "instruction": "Finish one piece of work completely. Leave nothing half-open.",
-    "source": "Placeholder — Craft",
-    "placeholder": true
+    "day": 3,
+    "theme": "Own the mirror",
+    "title": "Three honest notes",
+    "challenge": "Add three notes to your mirror: one thing you keep avoiding, one excuse you lean on, and one task you'll finish this week. Keep them factual.",
+    "why": "Plain truth, said without insults, is something you can act on.",
+    "tomorrow_teaser": "Tomorrow: find the weakest part of one skill and work on just that.",
+    "time": 10
   },
   "2026-10-09": {
-    "title": "The quiet hour",
-    "instruction": "Protect one hour with no inputs. Use it on the work that compounds.",
-    "source": "Placeholder — Attention",
-    "placeholder": true
+    "day": 4,
+    "theme": "Own the mirror",
+    "title": "Find the weak spot",
+    "challenge": "Pick one skill your goal depends on. Name the exact part where you're weakest, then spend 10 minutes working only on that part.",
+    "why": "Improvement starts with a precise diagnosis, not a general wish to be better.",
+    "tomorrow_teaser": "Tomorrow: list five hard things you've already come through.",
+    "time": 10
   },
   "2026-10-10": {
-    "title": "Say the number",
-    "instruction": "Write the single metric that would prove today counted.",
-    "source": "Placeholder — Scoreboard",
-    "placeholder": true
+    "day": 5,
+    "theme": "Own the mirror",
+    "title": "Fill the jar",
+    "challenge": "Write down five hard things you've already come through, big or small. Save the list somewhere you can open it in seconds.",
+    "why": "Proof of what you've handled before is the best answer to doubt today.",
+    "tomorrow_teaser": "Tomorrow: log your whole day in 30-minute blocks. No changes yet.",
+    "time": 10
   },
   "2026-10-11": {
-    "title": "Shorter loop",
-    "instruction": "Cut one step from something you repeat, and ship the simpler version.",
-    "source": "Placeholder — Systems",
-    "placeholder": true
+    "day": 6,
+    "theme": "Own the mirror",
+    "title": "Log the day",
+    "challenge": "Today, note what you actually do in 30-minute blocks from waking to bed. Don't fix anything yet. Just record it honestly.",
+    "why": "You can't take back time you haven't measured.",
+    "tomorrow_teaser": "Tomorrow: take back one wasted half hour and give it to your goal.",
+    "time": 10
   },
   "2026-10-12": {
-    "title": "The room",
-    "instruction": "Tell one person the standard you are holding. Ask nothing back.",
-    "source": "Placeholder — Accountability",
-    "placeholder": true
+    "day": 7,
+    "theme": "Own the mirror",
+    "title": "Take back time",
+    "challenge": "From yesterday's log, pick one 30-minute block that didn't serve you. Use 15 minutes of it today for your mirror goal.",
+    "why": "Most people don't lack time. They lack a plan for it. Raise the standard.",
+    "tomorrow_teaser": "Tomorrow: do the task you've put off longest, before anything else.",
+    "time": 15
   },
   "2026-10-13": {
-    "title": "Body first",
-    "instruction": "Train, walk, or move before the day makes the decision for you.",
-    "source": "Placeholder — Athletic Club",
-    "placeholder": true
+    "day": 8,
+    "theme": "Callous the mind",
+    "title": "Hard thing first",
+    "challenge": "Pick the small task you've been putting off longest. Do it first today, before anything easier gets your attention.",
+    "why": "Small, regular doses of discomfort build a mind that doesn't flinch.",
+    "tomorrow_teaser": "Tomorrow: when you want to stop, go a little further first.",
+    "time": 10
   },
   "2026-10-14": {
-    "title": "Close the loop",
-    "instruction": "Finish one conversation or task you have been leaving open.",
-    "source": "Placeholder — Execution",
-    "placeholder": true
+    "day": 9,
+    "theme": "Callous the mind",
+    "title": "A little further",
+    "challenge": "In a workout or focused task today, when you first want to stop, add a little more: a few good-form reps or five more minutes. Stop at any sharp pain.",
+    "why": "The first urge to quit is a signal, not your limit.",
+    "tomorrow_teaser": "Tomorrow: win the one second where quitting happens.",
+    "time": 10
   },
   "2026-10-15": {
-    "title": "One decision",
-    "instruction": "Make the decision you have been renting time to avoid.",
-    "source": "Placeholder — Operators",
-    "placeholder": true
+    "day": 10,
+    "theme": "Callous the mind",
+    "title": "Win the second",
+    "challenge": "The next time you feel the pull to skip or give up today, pause. Take three slow breaths, picture what happens if you fold, then choose.",
+    "why": "Most quitting happens in one moment. Be ready for that moment.",
+    "tomorrow_teaser": "Tomorrow: one line on why your hardest task matters.",
+    "time": 5
   },
   "2026-10-16": {
-    "title": "Subtract",
-    "instruction": "Remove one commitment that does not serve the standard.",
-    "source": "Placeholder — Focus",
-    "placeholder": true
+    "day": 11,
+    "theme": "Callous the mind",
+    "title": "Write the why",
+    "challenge": "Before your hardest task today, write one sentence on why it matters to you. Read it again when the task gets uncomfortable.",
+    "why": "A reason decided in advance holds up better than one you look for under pressure.",
+    "tomorrow_teaser": "Tomorrow: two everyday tasks with your other hand.",
+    "time": 5
   },
   "2026-10-17": {
-    "title": "Teach it",
-    "instruction": "Explain today’s work in three sentences someone else could use.",
-    "source": "Placeholder — Craft",
-    "placeholder": true
+    "day": 12,
+    "theme": "Callous the mind",
+    "title": "Other hand day",
+    "challenge": "Do two everyday tasks with your non-dominant hand, like brushing your teeth or stirring your coffee. When it feels clumsy, keep going.",
+    "why": "Choosing to be awkward on purpose is how a weak side gets stronger.",
+    "tomorrow_teaser": "Tomorrow: rehearse your hardest moment before it arrives.",
+    "time": 5
   },
   "2026-10-18": {
-    "title": "Recovery rep",
-    "instruction": "Stop on time. Protect sleep like it is part of the work.",
-    "source": "Placeholder — Recovery",
-    "placeholder": true
+    "day": 13,
+    "theme": "Callous the mind",
+    "title": "Rehearse the obstacle",
+    "challenge": "Spend five minutes picturing tomorrow's hardest moment. See where it could go wrong, and decide now what you'll do if it does.",
+    "why": "When you've already met the obstacle in your head, it can't catch you off guard.",
+    "tomorrow_teaser": "Tomorrow: do one small thing you've been avoiding out of fear.",
+    "time": 5
   },
   "2026-10-19": {
-    "title": "Review the week",
-    "instruction": "Name what held and what slipped. Set one standard for tomorrow.",
-    "source": "Placeholder — The Standard",
-    "placeholder": true
+    "day": 14,
+    "theme": "Callous the mind",
+    "title": "Walk toward it",
+    "challenge": "Pick one small thing you've avoided out of fear: a call, a question, a hard conversation. Do it today, even if it feels awkward.",
+    "why": "Fear shrinks when you move toward it and grows when you hide. Raise the standard.",
+    "tomorrow_teaser": "Tomorrow: plan an earlier start and protect the extra half hour.",
+    "time": 10
   }
 }
