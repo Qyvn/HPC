@@ -110,56 +110,86 @@ test("email is offered only after the third total done, and not once opted in", 
   assert.equal(today.shouldOfferEmail(8, false), true);
 });
 
-test("launch challenges are date-keyed, with kickers and a single tomorrow line", () => {
+test("launchDate offsets the whole block, and each item is keyed by day", () => {
   const raw = fs.readFileSync(path.join(__dirname, "data/challenges.json"), "utf8");
   const html = fs.readFileSync(path.join(__dirname, "today.html"), "utf8");
   assert.doesNotMatch(raw, /placeholder/i);
   assert.doesNotMatch(raw, /"source"/);
+  assert.doesNotMatch(raw, /"date"/);
   assert.doesNotMatch(html, /Placeholder copy/);
   assert.doesNotMatch(html, /id="challenge-source"/);
 
-  const dates = Object.keys(challenges).filter((key) => /^\d{4}-\d{2}-\d{2}$/.test(key)).sort();
-  assert.deepEqual(dates, [
-    "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10",
-    "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15",
-    "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19",
-  ]);
-
-  dates.forEach((date, index) => {
-    const entry = today.lookupChallenge(challenges, date);
-    assert.equal(entry.day, index + 1);
-    assert.equal(entry.fallback, false);
-    assert.equal(entry.placeholder, undefined);
-    assert.equal(entry.source, undefined);
-    assert.ok(entry.title && entry.challenge && entry.why && entry.theme);
-    assert.match(today.formatKicker(entry), new RegExp("^DAY " + (index + 1) + " · .+ · \\d+ MIN$"));
-    assert.doesNotMatch(JSON.stringify(entry), /placeholder/i);
+  assert.equal(challenges.launchDate, "2026-10-06");
+  assert.equal(challenges.challenges.length, 30);
+  challenges.challenges.forEach((item, index) => {
+    assert.equal(item.day, index + 1);
+    assert.equal(item.date, undefined);
+    assert.ok(item.title && item.challenge && item.why && item.theme && item.tomorrow_teaser);
+    assert.equal(typeof item.time, "number");
   });
 
-  const dayOne = today.lookupChallenge(challenges, "2026-10-06");
-  assert.equal(today.formatKicker(dayOne), "DAY 1 · OWN THE MIRROR · 5 MIN");
-  assert.equal(dayOne.title, "Name the blocker");
-  assert.match(dayOne.challenge, /bathroom mirror/);
+  assert.equal(today.dayNumber("2026-10-06", "2026-10-06"), 1);
+  assert.equal(today.dateForDay("2026-10-06", 1), "2026-10-06");
+  assert.equal(today.dateForDay("2026-10-06", 15), "2026-10-20");
+  assert.equal(today.dateForDay("2026-10-06", 30), "2026-11-04");
+  assert.equal(today.daysBetween("2026-10-06", "2026-11-04"), 29);
 
-  const dayNine = today.lookupChallenge(challenges, "2026-10-14");
-  assert.equal(today.formatKicker(dayNine), "DAY 9 · CALLOUS THE MIND · 10 MIN");
-  assert.equal(dayNine.title, "A little further");
+  const dayOne = today.viewFor(challenges, "2026-10-06");
+  assert.equal(dayOne.mode, "live");
+  assert.equal(dayOne.kicker, "DAY 1 · OWN THE MIRROR · 5 MIN");
+  assert.equal(dayOne.entry.title, "Name the blocker");
+  assert.match(dayOne.entry.challenge, /bathroom mirror/);
+  assert.equal(dayOne.tomorrow, "Tomorrow: one move against that habit before you open your phone.");
+  assert.equal(dayOne.doneEnabled, true);
+  assert.doesNotMatch(dayOne.tomorrow, /Tomorrow —/);
 
-  assert.equal(
-    today.tomorrowLine(challenges, "2026-10-06"),
-    "Tomorrow: one move against that habit before you open your phone."
-  );
-  assert.doesNotMatch(today.tomorrowLine(challenges, "2026-10-06"), /Tomorrow —/);
-  assert.equal(today.tomorrowLine(challenges, "2026-10-18"), "Tomorrow: do one small thing you've been avoiding out of fear.");
-  assert.equal(today.tomorrowLine(challenges, "2026-10-19"), "Tomorrow isn’t set yet.");
+  const dayNine = today.viewFor(challenges, "2026-10-14");
+  assert.equal(dayNine.kicker, "DAY 9 · CALLOUS THE MIND · 10 MIN");
+  assert.equal(dayNine.entry.title, "A little further");
 
-  const shifted = { "2026-11-02": challenges["2026-10-06"] };
-  assert.equal(today.formatKicker(today.lookupChallenge(shifted, "2026-11-02")), "DAY 1 · OWN THE MIRROR · 5 MIN");
-  assert.equal(today.lookupChallenge(challenges, "2020-01-01"), null);
-  assert.equal(today.challengeFor(challenges, "2020-01-01").fallback, true);
-  assert.equal(today.challengeFor(challenges, "2020-01-01").title, "The day is open.");
-  assert.equal(today.formatKicker(today.challengeFor(challenges, "2020-01-01")), "");
-  assert.equal(today.tomorrowLine(challenges, "2020-01-01"), "Tomorrow isn’t set yet.");
+  const dayFifteen = today.viewFor(challenges, "2026-10-20");
+  assert.equal(dayFifteen.mode, "live");
+  assert.equal(dayFifteen.kicker, "DAY 15 · WORK IN THE DARK · 5 MIN");
+  assert.equal(dayFifteen.entry.title, "Start earlier");
+  assert.equal(dayFifteen.tomorrow, "Tomorrow: watch someone excellent and ask why it works.");
+
+  const shifted = { launchDate: "2026-11-01", challenges: challenges.challenges };
+  assert.equal(today.viewFor(shifted, "2026-11-01").kicker, "DAY 1 · OWN THE MIRROR · 5 MIN");
+  assert.equal(today.viewFor(shifted, "2026-11-15").entry.title, "Start earlier");
+  assert.equal(today.viewFor(shifted, "2026-10-31").mode, "prelaunch");
+});
+
+test("the day before launch is a calm preview with Done disabled", () => {
+  const view = today.viewFor(challenges, "2026-10-05");
+  assert.equal(view.mode, "prelaunch");
+  assert.equal(view.entry.title, "Name the blocker");
+  assert.equal(view.entry.challenge, "Day 1 starts Tuesday, 6 October.");
+  assert.equal(view.entry.why, "");
+  assert.equal(view.kicker, "");
+  assert.equal(view.doneEnabled, false);
+  assert.equal(today.viewFor(challenges, "2026-10-01").mode, "prelaunch");
+});
+
+test("day 30 keeps its own ending teaser, and day 31 is open", () => {
+  const last = today.viewFor(challenges, "2026-11-04");
+  assert.equal(last.mode, "live");
+  assert.equal(last.entry.day, 30);
+  assert.equal(last.entry.title, "Start again at zero");
+  assert.equal(last.kicker, "DAY 30 · DETAIL AND FINISHING · 10 MIN");
+  assert.equal(last.tomorrow, "Tomorrow: a new block starts. Same mirror, higher standard.");
+  assert.equal(today.challengeByDay(challenges, 31), null);
+
+  const after = today.viewFor(challenges, "2026-11-05");
+  assert.equal(after.mode, "open");
+  assert.equal(after.entry.fallback, true);
+  assert.equal(after.entry.title, "The day is open.");
+  assert.equal(after.kicker, "");
+  assert.equal(after.tomorrow, "Tomorrow isn’t set yet.");
+  assert.equal(after.doneEnabled, true);
+
+  const missing = today.viewFor({ launchDate: "2026-10-06", challenges: [] }, "2026-10-06");
+  assert.equal(missing.mode, "open");
+  assert.equal(missing.entry.title, "The day is open.");
 });
 
 test("the page form requires unticked consent, a honeypot, and a privacy link", () => {

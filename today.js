@@ -49,12 +49,16 @@
   function formatDayLabel(iso) {
     const parts = iso.split("-").map(Number);
     const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 10, 0, 0));
-    return new Intl.DateTimeFormat("en-GB", {
+    const bag = Object.create(null);
+    new Intl.DateTimeFormat("en-GB", {
       timeZone: ZONE,
       weekday: "long",
       day: "numeric",
       month: "long",
-    }).format(date);
+    }).formatToParts(date).forEach(function (part) {
+      bag[part.type] = part.value;
+    });
+    return bag.weekday + ", " + bag.day + " " + bag.month;
   }
 
   function addDays(iso, amount) {
@@ -136,9 +140,32 @@
     return entry && typeof entry[key] === "string" ? entry[key].trim() : "";
   }
 
-  function lookupChallenge(data, iso) {
-    if (!data || typeof data !== "object" || !isRealDate(iso)) return null;
-    const entry = data[iso];
+  const OPEN_TOMORROW = "Tomorrow isn’t set yet.";
+
+  function daysBetween(fromIso, toIso) {
+    if (!isRealDate(fromIso) || !isRealDate(toIso)) return NaN;
+    const from = fromIso.split("-").map(Number);
+    const to = toIso.split("-").map(Number);
+    const start = Date.UTC(from[0], from[1] - 1, from[2]);
+    const end = Date.UTC(to[0], to[1] - 1, to[2]);
+    return Math.round((end - start) / 86400000);
+  }
+
+  function dayNumber(launch, today) {
+    return daysBetween(launch, today) + 1;
+  }
+
+  function dateForDay(launch, number) {
+    if (!isRealDate(launch) || !Number.isInteger(number)) return "";
+    return addDays(launch, number - 1);
+  }
+
+  function launchDateOf(data) {
+    const value = data && typeof data.launchDate === "string" ? data.launchDate : "";
+    return isRealDate(value) ? value : "";
+  }
+
+  function normalizeEntry(entry) {
     if (!entry || typeof entry !== "object") return null;
     const title = textField(entry, "title");
     const challenge = textField(entry, "challenge");
@@ -151,14 +178,22 @@
       why: textField(entry, "why"),
       tomorrow_teaser: textField(entry, "tomorrow_teaser"),
       theme: textField(entry, "theme"),
-      day: Number.isFinite(day) ? day : null,
+      day: Number.isInteger(day) ? day : null,
       time: Number.isFinite(time) ? time : null,
       fallback: false,
     };
   }
 
-  function challengeFor(data, iso) {
-    return lookupChallenge(data, iso) || FALLBACK;
+  function challengeByDay(data, day) {
+    const wanted = Number(day);
+    const list = data && Array.isArray(data.challenges) ? data.challenges : null;
+    if (!list || !Number.isInteger(wanted)) return null;
+    for (let i = 0; i < list.length; i += 1) {
+      if (Number(list[i] && list[i].day) !== wanted) continue;
+      const entry = normalizeEntry(list[i]);
+      if (entry) return entry;
+    }
+    return null;
   }
 
   function formatKicker(entry) {
@@ -166,12 +201,42 @@
     return "DAY " + entry.day + " · " + entry.theme.toUpperCase() + " · " + entry.time + " MIN";
   }
 
-  function tomorrowLine(data, today) {
-    const next = lookupChallenge(data, addDays(today, 1));
-    if (!next) return "Tomorrow isn’t set yet.";
-    const current = lookupChallenge(data, today);
-    if (current && current.tomorrow_teaser) return current.tomorrow_teaser;
-    return "Tomorrow isn’t set yet.";
+  function viewFor(data, today) {
+    const launch = launchDateOf(data);
+    if (!launch || !isRealDate(today)) {
+      return { mode: "open", entry: FALLBACK, kicker: "", tomorrow: OPEN_TOMORROW, doneEnabled: true };
+    }
+    const number = dayNumber(launch, today);
+    if (number < 1) {
+      const dayOne = challengeByDay(data, 1);
+      return {
+        mode: "prelaunch",
+        entry: {
+          title: dayOne ? dayOne.title : FALLBACK.title,
+          challenge: "Day 1 starts " + formatDayLabel(launch) + ".",
+          why: "",
+          tomorrow_teaser: "",
+          theme: "",
+          day: null,
+          time: null,
+          fallback: false,
+        },
+        kicker: "",
+        tomorrow: "",
+        doneEnabled: false,
+      };
+    }
+    const entry = challengeByDay(data, number);
+    if (!entry) {
+      return { mode: "open", entry: FALLBACK, kicker: "", tomorrow: OPEN_TOMORROW, doneEnabled: true };
+    }
+    return {
+      mode: "live",
+      entry: entry,
+      kicker: formatKicker(entry),
+      tomorrow: entry.tomorrow_teaser || OPEN_TOMORROW,
+      doneEnabled: true,
+    };
   }
 
   function loadTodos(stored, today) {
@@ -232,7 +297,8 @@
     const store = createStore(view && view.localStorage);
     const now = new Date();
     const today = dateKey(now);
-    let challenges = {};
+    let challenges = { launchDate: "", challenges: [] };
+    let page = viewFor(challenges, today);
 
     const dateEl = doc.getElementById("today-date");
     const kickerEl = doc.getElementById("challenge-kicker");
@@ -256,11 +322,11 @@
     }
 
     function paintChallenge() {
-      const entry = challengeFor(challenges, today);
-      const kicker = formatKicker(entry);
+      page = viewFor(challenges, today);
+      const entry = page.entry;
       if (kickerEl) {
-        kickerEl.textContent = kicker;
-        kickerEl.hidden = !kicker;
+        kickerEl.textContent = page.kicker;
+        kickerEl.hidden = !page.kicker;
       }
       if (titleEl) titleEl.textContent = entry.title;
       if (bodyEl) bodyEl.textContent = entry.challenge;
@@ -269,22 +335,26 @@
         whyEl.hidden = !entry.why;
       }
       if (article) {
+        article.dataset.mode = page.mode;
         article.dataset.fallback = entry.fallback ? "true" : "false";
         article.hidden = false;
       }
     }
 
     function paintDone() {
+      page = viewFor(challenges, today);
       const state = completionState(savedDates(), today);
+      const waiting = !page.doneEnabled;
+      const complete = !waiting && state.todayDone;
       if (doneBtn) {
-        const complete = state.todayDone;
-        doneBtn.dataset.state = complete ? "done" : "ready";
+        doneBtn.dataset.state = waiting ? "waiting" : complete ? "done" : "ready";
         doneBtn.setAttribute("aria-pressed", complete ? "true" : "false");
-        doneBtn.disabled = complete;
+        doneBtn.disabled = waiting || complete;
         doneBtn.classList.toggle("is-complete", complete);
+        doneBtn.classList.toggle("is-waiting", waiting);
         doneBtn.textContent = complete ? "Done today" : "Done";
       }
-      if (panel) panel.hidden = !state.todayDone;
+      if (panel) panel.hidden = !complete;
       if (countEl) {
         countEl.textContent = String(state.streak);
         countEl.dataset.streak = String(state.streak);
@@ -311,8 +381,8 @@
           dayList.append(item);
         });
       }
-      if (tomorrowEl) tomorrowEl.textContent = tomorrowLine(challenges, today);
-      paintEmail(state.total);
+      if (tomorrowEl) tomorrowEl.textContent = page.tomorrow;
+      paintEmail(waiting ? 0 : state.total);
       return state;
     }
 
@@ -363,7 +433,7 @@
 
     if (doneBtn) {
       doneBtn.addEventListener("click", function () {
-        if (doneBtn.disabled) return;
+        if (doneBtn.disabled || !page.doneEnabled) return;
         const dates = withDone(savedDates(), today);
         store.set(KEYS.done, JSON.stringify(dates));
         paintDone();
@@ -466,12 +536,12 @@
           return res.json();
         })
         .then(function (data) {
-          challenges = data && typeof data === "object" ? data : {};
+          challenges = data && typeof data === "object" ? data : { launchDate: "", challenges: [] };
           paintChallenge();
           paintDone();
         })
         .catch(function () {
-          challenges = {};
+          challenges = { launchDate: "", challenges: [] };
           paintChallenge();
           paintDone();
         });
@@ -599,10 +669,12 @@
     normalizeDates: normalizeDates,
     withDone: withDone,
     completionState: completionState,
-    lookupChallenge: lookupChallenge,
-    challengeFor: challengeFor,
+    daysBetween: daysBetween,
+    dayNumber: dayNumber,
+    dateForDay: dateForDay,
+    challengeByDay: challengeByDay,
+    viewFor: viewFor,
     formatKicker: formatKicker,
-    tomorrowLine: tomorrowLine,
     loadTodos: loadTodos,
     shouldOfferEmail: shouldOfferEmail,
     mount: mount,
