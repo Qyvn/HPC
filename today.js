@@ -8,10 +8,14 @@
   const ZONE = "Africa/Johannesburg";
   const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
   const EMAIL_AFTER = 3;
+  const COACH_MESSAGE_MAX = 400;
   const KEYS = {
     done: "hpc.today.done",
     todos: "hpc.today.todos",
     email: "hpc.today.email",
+    device: "hpc.today.device",
+    coachPush: "hpc.today.coachPush",
+    coachGreeted: "hpc.today.coachGreeted",
   };
   const FALLBACK = {
     title: "The day is open.",
@@ -261,6 +265,51 @@
     return total >= EMAIL_AFTER && !optedIn;
   }
 
+  function yesterdayResult(dates, today) {
+    if (!isRealDate(today)) return "unknown";
+    const set = dates instanceof Set ? dates : normalizeDates(dates);
+    const yesterday = addDays(today, -1);
+    if (set.has(yesterday)) return "done";
+    const anyOlder = Array.from(set).some(function (date) {
+      return date < yesterday;
+    });
+    return anyOlder ? "missed" : "unknown";
+  }
+
+  function deviceId(store) {
+    if (!store) return "anon";
+    const existing = store.get(KEYS.device);
+    if (existing && typeof existing === "string" && existing.length >= 8) return existing.slice(0, 64);
+    const id =
+      "d" +
+      Math.random().toString(36).slice(2, 10) +
+      Date.now().toString(36);
+    store.set(KEYS.device, id);
+    return id;
+  }
+
+  function loadCoachPush(stored, forDate) {
+    if (!stored || typeof stored !== "object") return "";
+    if (stored.date !== forDate) return "";
+    return typeof stored.text === "string" ? stored.text.trim().slice(0, 280) : "";
+  }
+
+  function adaptiveTomorrow(streak, todayDone, missedYesterday) {
+    if (missedYesterday || !todayDone) {
+      return "Tomorrow: 10-minute reset on today’s standard. No new goals until that lands.";
+    }
+    if (streak >= 3) {
+      return "Tomorrow: same work, 10 more minutes or one harder rep. Raise it.";
+    }
+    return "Tomorrow: protect the same window and finish clean.";
+  }
+
+  function extractTomorrowLine(reply) {
+    if (typeof reply !== "string") return "";
+    const match = reply.match(/Tomorrow:\s*[^\n]+/i);
+    return match ? match[0].trim().slice(0, 280) : "";
+  }
+
   function createStore(storage) {
     const memory = new Map();
     return {
@@ -314,12 +363,22 @@
     const tomorrowEl = doc.getElementById("tomorrow-line");
     const emailSection = doc.getElementById("email-prompt");
     const rows = Array.from(doc.querySelectorAll("[data-must-row]"));
+    const coachSection = doc.getElementById("coach");
+    const coachReplyEl = doc.getElementById("coach-reply");
+    const coachForm = doc.getElementById("coach-form");
+    const coachInput = doc.getElementById("coach-input");
+    const coachSubmit = doc.getElementById("coach-submit");
+    const coachError = doc.getElementById("coach-error");
+    const coachStatus = doc.getElementById("coach-status");
+    let coachBusy = false;
 
     if (dateEl) dateEl.textContent = formatLong(now);
 
     function savedDates() {
       return parseJson(store.get(KEYS.done), []);
     }
+
+    let lastState = completionState(savedDates(), today);
 
     function paintChallenge() {
       page = viewFor(challenges, today);
@@ -381,9 +440,138 @@
           dayList.append(item);
         });
       }
-      if (tomorrowEl) tomorrowEl.textContent = page.tomorrow;
+      if (tomorrowEl) {
+        const push = loadCoachPush(parseJson(store.get(KEYS.coachPush), null), addDays(today, 1));
+        tomorrowEl.textContent = push || page.tomorrow;
+      }
       paintEmail(waiting ? 0 : state.total);
+      lastState = state;
       return state;
+    }
+
+    function setCoachReply(text) {
+      if (!coachReplyEl) return;
+      const value = typeof text === "string" ? text.trim() : "";
+      coachReplyEl.textContent = value;
+      coachReplyEl.hidden = !value;
+    }
+
+    function setCoachError(text) {
+      if (!coachError) return;
+      const value = typeof text === "string" ? text.trim() : "";
+      coachError.textContent = value;
+      coachError.hidden = !value;
+    }
+
+    function setCoachBusy(on) {
+      coachBusy = on;
+      if (coachSubmit) {
+        coachSubmit.disabled = on;
+        coachSubmit.textContent = on ? "Sending…" : "Send";
+      }
+      if (coachInput) coachInput.disabled = on;
+      if (coachStatus) {
+        coachStatus.textContent = on ? "Coach is reading…" : "";
+        coachStatus.hidden = !on;
+      }
+    }
+
+    function coachContext(mode, message) {
+      const dates = savedDates();
+      const state = completionState(dates, today);
+      const entry = page.entry || FALLBACK;
+      const todos = loadTodos(parseJson(store.get(KEYS.todos), null), today);
+      return {
+        mode: mode,
+        deviceId: deviceId(store),
+        streak: state.streak,
+        yesterday: yesterdayResult(dates, today),
+        todayDone: state.todayDone,
+        challengeTitle: entry.title || "",
+        challenge: entry.challenge || "",
+        message: typeof message === "string" ? message.slice(0, COACH_MESSAGE_MAX) : "",
+        mustDos: todos
+          .filter(function (item) {
+            return item.text;
+          })
+          .map(function (item) {
+            return { text: item.text, done: item.done };
+          }),
+      };
+    }
+
+    function askCoach(mode, message) {
+      if (!view || !view.fetch || coachBusy) {
+        return Promise.resolve(null);
+      }
+      setCoachBusy(true);
+      setCoachError("");
+      return view
+        .fetch("/.netlify/functions/coach", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(coachContext(mode, message)),
+        })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, status: res.status, data: data || {} };
+          });
+        })
+        .then(function (result) {
+          const reply =
+            result.data && typeof result.data.reply === "string" ? result.data.reply.trim() : "";
+          if (reply) setCoachReply(reply);
+          if (!result.ok) {
+            if (result.status === 429) {
+              setCoachError("Rate limit. Come back tomorrow.");
+            } else if (!reply) {
+              setCoachError("Coach unavailable right now.");
+            }
+          }
+          if ((mode === "adaptive" || mode === "greeting") && reply) {
+            const missed = yesterdayResult(savedDates(), today) === "missed";
+            const shouldPush = mode === "adaptive" || missed;
+            if (shouldPush) {
+              const line =
+                extractTomorrowLine(reply) ||
+                adaptiveTomorrow(
+                  lastState.streak,
+                  mode === "adaptive" ? lastState.todayDone : false,
+                  missed
+                );
+              store.set(
+                KEYS.coachPush,
+                JSON.stringify({ date: addDays(today, 1), text: line })
+              );
+              if (tomorrowEl && lastState.todayDone) tomorrowEl.textContent = line;
+            }
+          }
+          return result;
+        })
+        .catch(function () {
+          setCoachError("Coach unavailable right now.");
+          return null;
+        })
+        .finally(function () {
+          setCoachBusy(false);
+        });
+    }
+
+    function maybeGreet() {
+      if (!coachSection || !view || !view.fetch) return;
+      if (store.get(KEYS.coachGreeted) === today) return;
+      askCoach("greeting", "").then(function (result) {
+        if (result && result.data && result.data.reply) {
+          store.set(KEYS.coachGreeted, today);
+        }
+      });
+    }
+
+    function maybeAdapt(prevDone) {
+      const state = completionState(savedDates(), today);
+      if (!prevDone && state.todayDone) {
+        askCoach("adaptive", "Challenge marked done.");
+      }
     }
 
     function paintEmail(total) {
@@ -434,9 +622,22 @@
     if (doneBtn) {
       doneBtn.addEventListener("click", function () {
         if (doneBtn.disabled || !page.doneEnabled) return;
+        const wasDone = completionState(savedDates(), today).todayDone;
         const dates = withDone(savedDates(), today);
         store.set(KEYS.done, JSON.stringify(dates));
         paintDone();
+        maybeAdapt(wasDone);
+      });
+    }
+
+    if (coachForm && coachInput) {
+      coachForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const message = coachInput.value.trim().slice(0, COACH_MESSAGE_MAX);
+        if (!message || coachBusy) return;
+        askCoach("report", message).then(function (result) {
+          if (result && result.ok) coachInput.value = "";
+        });
       });
     }
 
@@ -539,11 +740,13 @@
           challenges = data && typeof data === "object" ? data : { launchDate: "", challenges: [] };
           paintChallenge();
           paintDone();
+          maybeGreet();
         })
         .catch(function () {
           challenges = { launchDate: "", challenges: [] };
           paintChallenge();
           paintDone();
+          maybeGreet();
         });
     }
 
@@ -660,6 +863,7 @@
   return {
     ZONE: ZONE,
     EMAIL_AFTER: EMAIL_AFTER,
+    COACH_MESSAGE_MAX: COACH_MESSAGE_MAX,
     KEYS: KEYS,
     FALLBACK: FALLBACK,
     dateKey: dateKey,
@@ -677,6 +881,11 @@
     formatKicker: formatKicker,
     loadTodos: loadTodos,
     shouldOfferEmail: shouldOfferEmail,
+    yesterdayResult: yesterdayResult,
+    loadCoachPush: loadCoachPush,
+    adaptiveTomorrow: adaptiveTomorrow,
+    extractTomorrowLine: extractTomorrowLine,
+    deviceId: deviceId,
     mount: mount,
   };
 });

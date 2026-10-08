@@ -310,10 +310,71 @@
     }
 
     .done-block,
-    .day-ahead {
+    .day-ahead,
+    .coach {
       margin-top: 32px;
       padding-top: 28px;
       border-top: 1px solid var(--line);
+    }
+    .coach-reply {
+      margin: 0 0 18px;
+      max-width: 42ch;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: var(--silver);
+    }
+    .coach-form {
+      display: grid;
+      gap: 12px;
+    }
+    .coach-form label {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .coach-form textarea {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      padding: 14px 16px;
+      background: #060606;
+      border: 1px solid var(--line-strong);
+      border-radius: 0;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.5;
+      outline: none;
+      transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .coach-form textarea::placeholder { color: #5c636d; }
+    .coach-form textarea:focus {
+      border-color: var(--silver);
+      box-shadow: 0 0 0 1px rgba(200, 206, 216, 0.2);
+    }
+    .coach-form textarea:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+    .coach-actions {
+      display: grid;
+      gap: 10px;
+    }
+    .coach-status,
+    .coach-error {
+      margin: 0;
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+    .coach-status { color: var(--silver-dim); }
+    .coach-error { color: #c9a0a0; }
+    .coach-note {
+      margin: 14px 0 0;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--silver-dim);
     }
     .done-btn {
       width: 100%;
@@ -692,7 +753,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .nav, .nav-apply, .nav-link, .done-btn, .btn, .field input[type="email"] {
+      .nav, .nav-apply, .nav-link, .done-btn, .btn, .field input[type="email"], .coach-form textarea {
         transition: none;
       }
     }
@@ -743,6 +804,29 @@
           <p class="instruction" id="challenge-body"></p>
           <p class="why" id="challenge-why" hidden></p>
         </article>
+
+        <section class="coach" id="coach" aria-labelledby="coach-heading">
+          <h2 class="block-title" id="coach-heading">Coach check&#8209;in</h2>
+          <p class="coach-reply" id="coach-reply" hidden></p>
+          <form class="coach-form" id="coach-form">
+            <label for="coach-input">Report in</label>
+            <textarea
+              id="coach-input"
+              name="message"
+              maxlength="400"
+              rows="3"
+              placeholder="ran 5k, skipped push-ups"
+              enterkeyhint="send"
+              autocomplete="off"
+            ></textarea>
+            <div class="coach-actions">
+              <button class="btn btn-primary" type="submit" id="coach-submit">Send</button>
+              <p class="coach-status" id="coach-status" role="status" hidden></p>
+              <p class="coach-error" id="coach-error" role="alert" hidden></p>
+            </div>
+          </form>
+          <p class="coach-note">Short replies. No medical advice. Not stored beyond this device’s streak data.</p>
+        </section>
 
         <section class="done-block" aria-labelledby="done-heading">
           <h2 class="sr-only" id="done-heading">Mark today done</h2>
