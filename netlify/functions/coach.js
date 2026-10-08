@@ -174,16 +174,22 @@ function fallbackReply(payload) {
   if (payload.mode === "greeting") {
     if (payload.yesterday === "missed") {
       return (
-        "Streak broken at " +
-        payload.streak +
-        ". Call it. Comeback: finish today's challenge before noon, no negotiation. " +
+        "Streak broken. Call it. Comeback: finish today's challenge before noon, no negotiation. " +
         (payload.challengeTitle ? "Today: " + payload.challengeTitle + "." : "")
       ).slice(0, MAX_REPLY);
     }
+    const yesterdayLine =
+      payload.yesterday === "done"
+        ? "Yesterday held. "
+        : payload.streak > 0
+          ? "Streak is live. "
+          : "Day is open. ";
     return (
       "Streak " +
       payload.streak +
-      ". Yesterday held. Today's challenge is on the board" +
+      ". " +
+      yesterdayLine +
+      "Today's challenge is on the board" +
       (payload.challengeTitle ? " — " + payload.challengeTitle : "") +
       ". Do it."
     ).slice(0, MAX_REPLY);

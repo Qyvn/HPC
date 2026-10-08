@@ -112,7 +112,23 @@ test("handler returns a greeting without an API key via fallback", async () => {
   assert.equal(res.statusCode, 200);
   const body = JSON.parse(res.body);
   assert.match(body.reply, /Streak 4/);
+  assert.match(body.reply, /Yesterday held/);
   assert.equal(body.mode, "greeting");
+
+  const cold = await coach.handler({
+    httpMethod: "POST",
+    body: JSON.stringify({
+      mode: "greeting",
+      deviceId: "cold-device",
+      streak: 0,
+      yesterday: "unknown",
+      challengeTitle: "Name the blocker",
+    }),
+  });
+  assert.equal(cold.statusCode, 200);
+  const coldBody = JSON.parse(cold.body);
+  assert.match(coldBody.reply, /Day is open/);
+  assert.doesNotMatch(coldBody.reply, /Yesterday held/);
 });
 
 test("yesterdayResult distinguishes done, miss, and cold start", () => {
