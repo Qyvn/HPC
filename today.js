@@ -539,11 +539,7 @@
                   mode === "adaptive" ? lastState.todayDone : false,
                   missed
                 );
-              store.set(
-                KEYS.coachPush,
-                JSON.stringify({ date: addDays(today, 1), text: line })
-              );
-              if (tomorrowEl && lastState.todayDone) tomorrowEl.textContent = line;
+              saveCoachPush(line);
             }
           }
           return result;
@@ -567,11 +563,24 @@
       });
     }
 
+    function saveCoachPush(text) {
+      const line = typeof text === "string" ? text.trim().slice(0, 280) : "";
+      if (!line) return "";
+      store.set(KEYS.coachPush, JSON.stringify({ date: addDays(today, 1), text: line }));
+      if (tomorrowEl) tomorrowEl.textContent = line;
+      return line;
+    }
+
     function maybeAdapt(prevDone) {
       const state = completionState(savedDates(), today);
-      if (!prevDone && state.todayDone) {
-        askCoach("adaptive", "Challenge marked done.");
+      if (!state.todayDone) return;
+      const existing = loadCoachPush(parseJson(store.get(KEYS.coachPush), null), addDays(today, 1));
+      if (prevDone && existing) return;
+      const missed = yesterdayResult(savedDates(), today) === "missed";
+      if (!existing) {
+        saveCoachPush(adaptiveTomorrow(state.streak, true, missed));
       }
+      askCoach("adaptive", "Challenge marked done.");
     }
 
     function paintEmail(total) {
