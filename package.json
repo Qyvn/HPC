@@ -4,6 +4,6 @@
   "private": true,
   "description": "High Performers Club static site + ops functions",
   "scripts": {
-    "test": "node --test today.test.js"
+    "test": "node --test today.test.js coach.test.js"
   }
 }
