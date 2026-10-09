@@ -17,3 +17,13 @@
   from = "/today"
   to = "/today.html"
   status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/join"
+  to = "/join.html"
+  status = 200
