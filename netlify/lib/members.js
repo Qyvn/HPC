@@ -231,45 +231,80 @@ async function applicationAccepted(applicationId, email) {
   return false;
 }
 
+async function listMemberEmails() {
+  const emails = new Set();
+  memory.forEach(function (_value, key) {
+    if (key.indexOf("member:") === 0) emails.add(key.slice("member:".length));
+  });
+  try {
+    const store = await getStore();
+    if (store && typeof store.list === "function") {
+      const listed = await store.list({ prefix: "member:" });
+      const blobs = (listed && listed.blobs) || [];
+      blobs.forEach(function (item) {
+        const key = item && item.key ? item.key : "";
+        if (key.indexOf("member:") === 0) emails.add(key.slice("member:".length));
+      });
+    }
+  } catch (err) {
+    /* list optional */
+  }
+  return Array.from(emails);
+}
+
 async function activateMembersForAccepted(stages) {
   const map = stages && typeof stages === "object" ? stages : {};
-  const acceptedIds = Object.keys(map).filter(function (id) {
-    return map[id] === "accepted";
-  });
-  if (!acceptedIds.length) return { activated: 0 };
-
-  const token = process.env.NETLIFY_ACCESS_TOKEN;
-  if (!token) return { activated: 0 };
+  const acceptedIds = new Set(
+    Object.keys(map).filter(function (id) {
+      return map[id] === "accepted";
+    })
+  );
+  if (!acceptedIds.size) return { activated: 0 };
 
   let activated = 0;
+
+  // Activate any stored members whose application was accepted.
+  const emails = await listMemberEmails();
+  for (const email of emails) {
+    const member = await getMember(email);
+    if (!member || member.status === "active") continue;
+    if (member.applicationId && acceptedIds.has(member.applicationId)) {
+      member.status = "active";
+      member.activatedAt = new Date().toISOString();
+      await saveMember(member);
+      activated += 1;
+    }
+  }
+
+  const token = process.env.NETLIFY_ACCESS_TOKEN;
+  if (!token) return { activated: activated };
+
   try {
     const formsRes = await fetch(`https://api.netlify.com/api/v1/sites/${SITE_ID}/forms`, {
       headers: { Authorization: "Bearer " + token },
     });
-    if (!formsRes.ok) return { activated: 0 };
+    if (!formsRes.ok) return { activated: activated };
     const forms = await formsRes.json();
     const form = (forms || []).find(function (f) {
       return f.name === FORM_NAME;
     }) || (forms && forms[0]);
-    if (!form) return { activated: 0 };
+    if (!form) return { activated: activated };
     const subRes = await fetch(`https://api.netlify.com/api/v1/forms/${form.id}/submissions`, {
       headers: { Authorization: "Bearer " + token },
     });
-    if (!subRes.ok) return { activated: 0 };
+    if (!subRes.ok) return { activated: activated };
     const submissions = await subRes.json();
     for (const s of submissions || []) {
-      if (!acceptedIds.includes(s.id)) continue;
+      if (!acceptedIds.has(s.id)) continue;
       const email = normalizeEmail((s.data && s.data.email) || s.email || "");
       if (!email) continue;
       const member = await getMember(email);
-      if (!member) continue;
-      if (member.status !== "active") {
-        member.status = "active";
-        member.applicationId = s.id;
-        member.activatedAt = new Date().toISOString();
-        await saveMember(member);
-        activated += 1;
-      }
+      if (!member || member.status === "active") continue;
+      member.status = "active";
+      member.applicationId = s.id;
+      member.activatedAt = new Date().toISOString();
+      await saveMember(member);
+      activated += 1;
     }
   } catch (err) {
     return { activated: activated };
