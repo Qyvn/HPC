@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Member login for High Performers Club." />
+  <link rel="canonical" href="https://highperformersclub.co.za/login" />
+  <title>Login — High Performers Club</title>
+  <link rel="icon" type="image/png" href="public/assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Michroma&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #000000;
+      --line: rgba(192, 198, 208, 0.12);
+      --line-strong: rgba(192, 198, 208, 0.32);
+      --silver: #c8ced8;
+      --silver-bright: #e8ecf2;
+      --silver-dim: #8a919c;
+      --ink: #f2f4f7;
+      --muted: #9aa1ab;
+      --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+      --body: "Inter", "Segoe UI", sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--body);
+      color: var(--ink);
+      background: radial-gradient(120% 80% at 50% -10%, #1a1c20 0%, var(--bg-deep) 55%);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--silver); text-decoration: none; }
+    a:hover { color: var(--silver-bright); }
+    .wrap {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--display);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      margin-bottom: 40px;
+    }
+    .brand img { width: 28px; height: 28px; }
+    h1 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: clamp(1.2rem, 3vw, 1.55rem);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--silver-bright);
+      line-height: 1.35;
+    }
+    .lead {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .field { display: grid; gap: 10px; margin-bottom: 16px; }
+    .field label {
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+    }
+    .field input {
+      width: 100%;
+      background: #060606;
+      border: 1px solid var(--line-strong);
+      color: var(--ink);
+      padding: 14px 16px;
+      min-height: 50px;
+      border-radius: 0;
+      font: inherit;
+      outline: none;
+    }
+    .field input:focus {
+      border-color: var(--silver);
+      box-shadow: 0 0 0 1px rgba(200, 206, 216, 0.2);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      min-height: 48px;
+      margin-top: 8px;
+      background: linear-gradient(180deg, #f4f6f9 0%, #b7bfcb 100%);
+      color: #080808;
+      border: 1px solid #dce2ea;
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.55; cursor: wait; }
+    .error {
+      margin: 14px 0 0;
+      color: #c9a0a0;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      display: none;
+    }
+    .error.is-on { display: block; }
+    .foot {
+      margin-top: 22px;
+      color: var(--silver-dim);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+    .session {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      margin-top: 8px;
+    }
+    .session p { color: var(--muted); margin: 0 0 16px; line-height: 1.55; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="public/assets/hpc-mark.png" width="28" height="28" alt="" />
+      High Performers Club
+    </a>
+
+    <div id="login-panel">
+      <h1>Member login</h1>
+      <p class="lead">For applicants who created a login after applying.</p>
+      <form id="login-form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" />
+        </div>
+        <button class="btn" type="submit" id="login-submit">Log in</button>
+        <p class="error" id="login-error" role="alert"></p>
+      </form>
+      <p class="foot">
+        Applied but no login yet? <a href="/join">Create your login</a>.<br />
+        New here? <a href="/#apply">Apply first</a>.
+      </p>
+    </div>
+
+    <div class="session" id="session-panel" hidden>
+      <h1>Signed in</h1>
+      <p id="session-copy"></p>
+      <a class="btn" href="/today" style="text-decoration:none;margin-bottom:12px;">Open Today</a>
+      <button class="btn" type="button" id="logout-btn" style="background:transparent;color:var(--silver-bright);border-color:var(--line-strong);">Log out</button>
+    </div>
+  </div>
+  <script src="/public/member.js"></script>
+  <script>
+    (function () {
+      const loginPanel = document.getElementById("login-panel");
+      const sessionPanel = document.getElementById("session-panel");
+      const sessionCopy = document.getElementById("session-copy");
+      const form = document.getElementById("login-form");
+      const errorEl = document.getElementById("login-error");
+      const submit = document.getElementById("login-submit");
+
+      function showSession(member) {
+        loginPanel.hidden = true;
+        sessionPanel.hidden = false;
+        sessionCopy.textContent =
+          "Welcome back, " + (member.name || "member") + ". Your streak syncs on Today.";
+      }
+
+      function showError(msg) {
+        errorEl.textContent = msg || "Could not log in.";
+        errorEl.classList.add("is-on");
+      }
+
+      HpcMember.me().then(function (res) {
+        if (res.ok && res.data.member) showSession(res.data.member);
+      });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        errorEl.classList.remove("is-on");
+        submit.disabled = true;
+        submit.textContent = "Checking…";
+        HpcMember.login(
+          document.getElementById("email").value,
+          document.getElementById("password").value
+        )
+          .then(function (res) {
+            if (!res.ok) {
+              showError((res.data && res.data.error) || "Could not log in.");
+              return;
+            }
+            showSession(res.data.member);
+          })
+          .catch(function () {
+            showError("Could not log in just now.");
+          })
+          .finally(function () {
+            submit.disabled = false;
+            submit.textContent = "Log in";
+          });
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", function () {
+        HpcMember.logout().then(function () {
+          location.reload();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
