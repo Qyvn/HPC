@@ -214,7 +214,9 @@ test("the page form requires unticked consent, a honeypot, and a privacy link", 
   const privacy = fs.readFileSync(path.join(__dirname, "privacy.html"), "utf8");
   assert.match(privacy, /Daily challenge/);
   assert.match(privacy, /unsubscribe/i);
+  assert.match(privacy, /Coach check-in/);
   const toml = fs.readFileSync(path.join(__dirname, "netlify.toml"), "utf8");
   assert.match(toml, /from = "\/today"/);
   assert.match(toml, /to = "\/today.html"/);
+  assert.match(toml, /functions = "netlify\/functions"/);
 });

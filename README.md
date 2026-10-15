@@ -21,6 +21,22 @@ Form fields: name, email, lane, why.
 
 Redeploy after changes: `npx netlify deploy --prod --dir=.`
 
+## Coach (`/today`)
+
+Netlify function: `netlify/functions/coach.js`.
+
+Set one AI key in the Netlify site env (Site settings → Environment variables), then redeploy:
+
+| Variable | Required | Notes |
+|----------|----------|--------|
+| `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` | one of them | AI provider key |
+| `COACH_MODEL` | no | defaults `gpt-4o-mini` or `claude-3-5-haiku-latest` |
+| `COACH_RATE_LIMIT` | no | max requests per device per 24h (default `20`) |
+
+Also used by ops CRM: `NETLIFY_ACCESS_TOKEN`, `OPS_PASSWORD`.
+
+Without an AI key the function still returns a short local fallback reply so the panel does not go blank.
+
 ## Domain email
 
 See **EMAIL.md** for ImprovMX / Microsoft 365 setup so `apply@highperformersclub.co.za` receives mail.
