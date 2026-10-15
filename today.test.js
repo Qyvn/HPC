@@ -207,7 +207,7 @@ test("the page form requires unticked consent, a honeypot, and a privacy link", 
 
   const index = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
   assert.match(index, /href="\/today"/);
-  const tiktok = /<a href="https:\/\/www\.tiktok\.com\/@highperformersclb" target="_blank" rel="noopener" aria-label="TikTok">TikTok<\/a>/;
+  const tiktok = /<a href="https:\/\/www\.tiktok\.com\/@highperformersclubza" target="_blank" rel="noopener" aria-label="TikTok">TikTok<\/a>/;
   assert.match(html, tiktok);
   assert.match(index, tiktok);
   assert.doesNotMatch(fs.readFileSync(path.join(__dirname, "privacy.html"), "utf8"), /footer-meta/);
