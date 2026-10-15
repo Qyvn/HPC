@@ -427,9 +427,47 @@
       });
     }
 
+    function syncMemberStreak() {
+      const memberApi = view && view.HpcMember;
+      if (!memberApi || typeof memberApi.sync !== "function") return Promise.resolve(null);
+      return memberApi.sync(savedDates()).catch(function () {
+        return null;
+      });
+    }
+
+    function pullMemberStreak() {
+      const memberApi = view && view.HpcMember;
+      const note = doc.getElementById("device-note");
+      if (!memberApi || typeof memberApi.me !== "function") return Promise.resolve(null);
+      return memberApi
+        .me()
+        .then(function (res) {
+          if (!res || !res.ok || !res.data || !res.data.member) return null;
+          const remote = res.data.member.streak && Array.isArray(res.data.member.streak.done)
+            ? res.data.member.streak.done
+            : [];
+          const merged = Array.from(
+            new Set([].concat(savedDates(), remote).filter(isRealDate))
+          ).sort();
+          store.set(KEYS.done, JSON.stringify(merged));
+          if (note) {
+            note.innerHTML =
+              "Signed in as " +
+              (res.data.member.name || res.data.member.email) +
+              ". Streak syncs across devices. <a href=\"/login\">Account</a>";
+          }
+          paintDone();
+          return res.data.member;
+        })
+        .catch(function () {
+          return null;
+        });
+    }
+
     paintDone();
     paintTodos();
     if (!(view && view.fetch)) paintChallenge();
+    pullMemberStreak();
 
     if (doneBtn) {
       doneBtn.addEventListener("click", function () {
@@ -437,6 +475,7 @@
         const dates = withDone(savedDates(), today);
         store.set(KEYS.done, JSON.stringify(dates));
         paintDone();
+        syncMemberStreak();
       });
     }
 

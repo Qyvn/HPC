@@ -359,10 +359,52 @@
       stageMap[id] = stage;
       saveStages();
       render();
+      pushStages().catch((err) => {
+        statusEl.textContent = err.message || "Could not sync stages";
+        statusEl.classList.add("is-error");
+      });
     }
 
     function basicHeader() {
       return localStorage.getItem(AUTH_KEY) || "";
+    }
+
+    async function pullStages() {
+      const res = await fetch("/.netlify/functions/ops-stages", {
+        headers: { Authorization: basicHeader() },
+      });
+      if (res.status === 401) throw new Error("Unauthorized");
+      if (!res.ok) return;
+      const data = await res.json().catch(() => ({}));
+      if (data.stages && typeof data.stages === "object") {
+        stageMap = Object.assign({}, stageMap, data.stages);
+        saveStages();
+      }
+    }
+
+    async function pushStages() {
+      const res = await fetch("/.netlify/functions/ops-stages", {
+        method: "PUT",
+        headers: {
+          Authorization: basicHeader(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stages: stageMap }),
+      });
+      if (res.status === 401) {
+        localStorage.removeItem(AUTH_KEY);
+        showGate();
+        throw new Error("Unauthorized");
+      }
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Stages sync ${res.status}`);
+      }
+      const data = await res.json().catch(() => ({}));
+      if (typeof data.activated === "number" && data.activated > 0) {
+        statusEl.textContent = `Unlocked ${data.activated} member login${data.activated === 1 ? "" : "s"}.`;
+        statusEl.classList.remove("is-error");
+      }
     }
 
     async function fetchApps() {
@@ -383,12 +425,14 @@
       }
       const data = await res.json();
       applications = data.applications || [];
+      await pullStages().catch(() => {});
       // Drop orphan stage keys quietly
       const ids = new Set(applications.map((a) => a.id));
       Object.keys(stageMap).forEach((id) => {
         if (!ids.has(id)) delete stageMap[id];
       });
       saveStages();
+      await pushStages().catch(() => {});
       syncLabel.textContent = `${applications.length} total · updated ${new Date().toLocaleTimeString()}`;
       render();
     }

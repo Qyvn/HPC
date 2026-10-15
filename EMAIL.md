@@ -31,3 +31,5 @@ Buy Microsoft 365 Business Basic for the domain, create `apply@highperformersclu
 Private pipeline board: https://highperformersclub.co.za/ops  
 
 Password is set in Netlify env `OPS_PASSWORD` (shared separately). Stages: Applied → Reviewing → Accepted → Declined.
+
+Moving someone to **Accepted** unlocks their member login (created at `/join` with the same email).

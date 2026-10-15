@@ -711,6 +711,7 @@
         <a class="nav-link" href="/#club">Club</a>
         <a class="nav-link" href="/#entry">Entry</a>
         <a class="nav-link" href="/today" aria-current="page">Today</a>
+        <a class="nav-link" href="/login">Login</a>
         <a class="nav-apply" href="/#apply">Apply</a>
       </nav>
       <div class="nav-tools">
@@ -729,6 +730,7 @@
         <a href="/#club">Club</a>
         <a href="/#entry">Entry</a>
         <a href="/today" aria-current="page">Today</a>
+        <a href="/login">Login</a>
         <a href="/#apply">Apply</a>
       </nav>
     </div>
@@ -756,7 +758,7 @@
             <ol class="days" id="day-row"></ol>
             <p class="tomorrow" id="tomorrow-line"></p>
           </div>
-          <p class="device-note">Saved on this device.</p>
+          <p class="device-note" id="device-note">Saved on this device. <a href="/login">Log in</a> to keep your streak across devices.</p>
         </section>
 
         <section class="email-prompt" id="email-prompt" hidden>
@@ -845,6 +847,7 @@
       </div>
     </footer>
   </div>
+  <script src="/public/member.js"></script>
   <script src="/today.js"></script>
 </body>
 </html>
